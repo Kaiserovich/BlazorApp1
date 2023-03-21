@@ -7,7 +7,14 @@
                 <p>@Game.Name</p>
                 <p>@Game.Genre</p>
                 <p>@Game.ReleaseDate.ToString("dd.MM.yyyy")</p>
-
+                @if (Game.Name.Equals("The Wither") && AppStyle.WitcherWords != null)
+                {
+                    <div class="row mt-3">
+                        <div class="col altert alert-light text-center">
+                            @AppStyle.WitcherWords[rnd.Next(0,AppStyle.WitcherWords.Count)]
+                        </div>
+                    </div>
+                }
                 @if (DisplayButtons)
                 {
                     <div class="row">
@@ -41,4 +48,8 @@
     [Parameter] public bool DisplayButtons { get; set; } = false;
     [Parameter] public EventCallback<Game> DeleteGame { get; set; }
     [Parameter] public EventCallback SwitchGame { get; set; }
+
+    [CascadingParameter] public AppStyle AppStyle { get; set; }
+    Random rnd = new Random(DateTime.Now.Millisecond);
+
 }
