@@ -5,31 +5,24 @@
                 <th>Name</th>
                 <th>Genre</th>
                 <th>Realise Date</th>
-                <th><input type="checkbox" @bind="displayButtons"/></th>
+                <th><input type="checkbox" @bind="displayButtons" /></th>
             </tr>
         </thead>
         <tbody>
-            @if(Games == null)
-            {
-                <tr>Loading data...</tr>
-            }
-            else if (Games.Count == 0)
-            {
-                <tr>No items in array</tr>
-            }
-            else
-            {
-                @foreach (var item in Games)
-                {
-                    <IndividualGame Game="item" IsTable="true" DisplayButtons="displayButtons" DeleteGame="DeleteTheGame"/>
-                }
-            }
+            <GenericList ListOfItems="Games">
+                <ItemTemplate Context="game">
+                    <IndividualGame Game="game" IsTable="true" DisplayButtons="displayButtons" DeleteGame="DeleteTheGame" />
+                </ItemTemplate>
+            </GenericList>
         </tbody>
     </table>
 </div>
 
 @code {
     [Parameter] public List<Game> Games { get; set; }
+
+
+
     bool displayButtons = false;
 
     void DeleteTheGame(Game game)
