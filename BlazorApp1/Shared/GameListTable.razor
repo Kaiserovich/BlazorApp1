@@ -14,6 +14,9 @@
                     <IndividualGame Game="game" IsTable="true" DisplayButtons="displayButtons" DeleteGame="DeleteTheGame" />
                 </ItemTemplate>
             </GenericList>
+            <Confirmation @ref="confirmation" OnCancel="OnCancel" OnConfirm="OnConfirm">
+                <div class="text-danger">Do you wish to delete @gameToBeDeleted.Name?</div>
+            </Confirmation>
         </tbody>
     </table>
 </div>
@@ -25,24 +28,22 @@
 
     void DeleteTheGame(Game game)
     {
-        Games.Remove(game);
+        gameToBeDeleted = game;
+        confirmation.Show();
     }
 
-    /*---------------------------*/
-    protected override void OnInitialized()
+    Confirmation confirmation;
+    Game gameToBeDeleted;
+
+    void OnConfirm()
     {
-        Console.WriteLine($"1. OnInitialized. Games count:{Games?.Count}.");
+        Games.Remove(gameToBeDeleted);
+        confirmation.Hide();
+        gameToBeDeleted = null;
     }
-    protected override void OnParametersSet()
+    void OnCancel()
     {
-        Console.WriteLine($"2. OnParametersSet. Games count:{Games?.Count}.");
-    }
-    protected override void OnAfterRender(bool firstRender)
-    {
-        Console.WriteLine($"3. OnAfterRender. Firts render? {firstRender}.");
-    }
-    protected override bool ShouldRender()
-    {
-        return true;
+        confirmation.Hide();
+        gameToBeDeleted = null;
     }
 }
