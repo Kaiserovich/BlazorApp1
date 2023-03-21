@@ -1,3 +1,5 @@
+using BlazorApp1;
+using BlazorApp1.Repository;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -6,6 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddSingleton<SingletonServices>();
+builder.Services.AddTransient<TransientServices>();
+builder.Services.AddTransient<IRepository, MockGamesRepository>();
+
+
+
 
 var app = builder.Build();
 
