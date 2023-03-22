@@ -1,0 +1,25 @@
+﻿@if (Client != null)
+{
+    @if (!IsTable)
+    {
+        <div class="row text-center alert alert-info">
+            <div class="col">
+                <p>@Client.Name</p>
+                <p>@Client.DataCreate.ToString("dd.MM.yyyy")</p>
+                <p>@Client.Status</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <tr>
+            <td>@Client.Name</td>
+            <td>@Client.DataCreate.ToString("dd.MM.yyyy")</td>
+            <td>@Client.Status</td>
+        </tr>
+    }
+}
+@code {
+    [Parameter] public Client Client { get; set; }
+    [Parameter] public bool IsTable { get; set; }
+}

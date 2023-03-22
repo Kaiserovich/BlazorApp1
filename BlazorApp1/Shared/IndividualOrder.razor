@@ -1,0 +1,31 @@
+﻿@if (Order != null)
+{
+    @if (!IsTable)
+    {
+        <div class="row text-center alert alert-info">
+            <div class="col">
+                <p>@Order.ClientId</p>
+                <p>@Order.Decription</p>
+                <p>@Order.Date.ToString("dd.MM.yyyy")</p>
+                <p>@Order.Price</p>
+                <p>@Order.Status</p>
+                <p>@Order.CurrencyId</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <tr>
+            <td>@Order.ClientId</td>
+            <td>@Order.Decription</td>
+            <td>@Order.Date.ToString("dd.MM.yyyy")</td>
+            <td>@Order.Price</td>
+            <td>@Order.Status</td>
+            <td>@Order.CurrencyId</td>
+        </tr>
+    }
+}
+@code {
+    [Parameter] public Order Order { get; set; }
+    [Parameter] public bool IsTable { get; set; }
+}

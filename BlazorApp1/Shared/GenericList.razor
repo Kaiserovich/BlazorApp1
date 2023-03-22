@@ -1,0 +1,41 @@
+﻿@typeparam TItem
+
+@if (ListOfItems == null)
+{
+    @if (NullList != null)
+    {
+        @NullList
+    }
+    else
+    {
+        <img src="https://miro.medium.com/v2/resize:fit:1400/1*CsJ05WEGfunYMLGfsT2sXA.gif" height="200" />
+    }
+}
+else if (ListOfItems.Count == 0)
+{
+    @if (EmptyList != null)
+    {
+        @EmptyList
+    }
+    else
+    {
+        <img src="https://i.pinimg.com/originals/ae/8a/c2/ae8ac2fa217d23aadcc913989fcc34a2.png" height="200" />
+    }
+}
+else
+{
+    @foreach (var item in ListOfItems)
+    {
+        @ItemTemplate(item)
+    }
+}
+
+
+
+@code {
+    [Parameter] public RenderFragment NullList { get; set; }
+    [Parameter] public RenderFragment EmptyList { get; set; }
+    [Parameter] public RenderFragment<TItem> ItemTemplate { get; set; }
+
+    [Parameter] public List<TItem> ListOfItems { get; set; }
+}

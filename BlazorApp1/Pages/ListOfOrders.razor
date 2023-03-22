@@ -1,0 +1,37 @@
+﻿@page "/orders"
+@inject BlazorApp1.Repository.IRepository repository
+
+<PageTitle>List of orders</PageTitle>
+
+<h3>List of orders</h3>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ClientId</th>
+                <th>Decription</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>CurrencyId</th>
+            </tr>
+        </thead>
+        <tbody>
+            <GenericList ListOfItems="orders">
+                <ItemTemplate Context="order">
+                    <IndividualOrder Order="order" IsTable="true" />
+                </ItemTemplate>
+            </GenericList>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<Order> orders;
+
+    protected async override Task OnInitializedAsync()
+    {
+        orders = repository.GetAllOrders();
+    }
+}
