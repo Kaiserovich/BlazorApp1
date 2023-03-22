@@ -8,7 +8,7 @@ namespace BlazorApp1.Entities.Models
         public string Decription { get; set; }
         public DateTime Date { get; set; }
         public int Price { get; set; }
-        public string Status { get; set; }
+        public OrderStatus Status { get; set; }
         public int CurrencyId { get; set; }
 
         public int ClientId { get; set; }
