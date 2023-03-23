@@ -17,7 +17,10 @@
     {
         <tr>
             <td>@Order.Id</td>
-            <td>@Order.ClientId</td>
+            @if (IsVisibleClientId)
+            {
+                <td>@Order.ClientId</td>
+            }
             <td>@Order.Decription</td>
             <td>@Order.Date.ToString("dd.MM.yyyy")</td>
             <td>@Order.Price</td>
@@ -29,4 +32,7 @@
 @code {
     [Parameter] public Order Order { get; set; }
     [Parameter] public bool IsTable { get; set; }
+    [Parameter] public bool IsWithButtons { get; set; } = true;
+    [Parameter] public bool IsVisibleClientId { get; set; } = true;
+
 }

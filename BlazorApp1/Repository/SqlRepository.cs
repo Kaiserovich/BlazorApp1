@@ -7,19 +7,19 @@ namespace BlazorApp1.Repository
     //Сделать все async
     public class SqlRepository : IRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _db;
 
         public SqlRepository(AppDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _db = dbContext;
         }
         public bool CreateClient(Client client)
         {
             if (client is null)
                 return false;
 
-            _dbContext.Add(client);
-            _dbContext.SaveChanges();
+            _db.Add(client);
+            _db.SaveChanges();
             return true;
         }
 
@@ -28,8 +28,8 @@ namespace BlazorApp1.Repository
             if (order is null)
                 return false;
 
-            _dbContext.Add(order);
-            _dbContext.SaveChanges();
+            _db.Add(order);
+            _db.SaveChanges();
             return true;
         }
 
@@ -38,8 +38,8 @@ namespace BlazorApp1.Repository
             if (client is null)
                 return false;
 
-            _dbContext.Remove(client);
-            _dbContext.SaveChanges();
+            _db.Remove(client);
+            _db.SaveChanges();
             return true;
         }
 
@@ -48,8 +48,8 @@ namespace BlazorApp1.Repository
             if (order is null)
                 return false;
 
-            _dbContext.Remove(order);
-            _dbContext.SaveChanges();
+            _db.Remove(order);
+            _db.SaveChanges();
             return true;
         }
 
@@ -58,8 +58,8 @@ namespace BlazorApp1.Repository
             if (client is null)
                 return false;
 
-            _dbContext.Clients.Update(client);
-            _dbContext.SaveChanges();
+            _db.Clients.Update(client);
+            _db.SaveChanges();
             return true;
         }
 
@@ -68,33 +68,54 @@ namespace BlazorApp1.Repository
             if (order is null)
                 return false;
 
-            _dbContext.Orders.Update(order);
-            _dbContext.SaveChanges();
+            _db.Orders.Update(order);
+            _db.SaveChanges();
             return true;
         }
 
         public List<Client> GetAllClients()
         {
-            var result = _dbContext.Clients.ToList();
+            var result = _db.Clients.ToList();
             return result;
         }
 
 
         public List<Order> GetAllOrders()
         {
-            var result = _dbContext.Orders.ToList();
+            var result = _db.Orders.ToList();
             return result;
         }
 
         public Client GetClientById(int id)
         {
-            var client = _dbContext.Clients.FirstOrDefault(x => x.Id == id);
-            return client;
+            var result = _db.Clients.FirstOrDefault(x => x.Id == id);
+            return result;
         }
 
         public Order GetOrderById(int id)
         {
-            throw new NotImplementedException();
+            var result = _db.Orders.FirstOrDefault(x => x.Id == id);
+            return result;
         }
+
+        public List<Order> GetOrdersByClientId(int clientId)
+        {
+            var result = _db.Orders.Where(order => order.ClientId == clientId).ToList();
+            return result;
+        }
+
+        /* .Join(_db.Clients,
+        order => order.ClientId,
+        client => client.Id, (order, client) => new
+        {
+            Id = order.Id,
+            Decription = order.Decription,
+            Date = order.Date,
+            Price = order.Price,
+            Status = order.Status,
+            CurrencyId = order.CurrencyId
+
+        }).ToList();*/
+
     }
 }
