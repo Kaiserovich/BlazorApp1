@@ -1,4 +1,4 @@
-﻿@if (displayConfirmation)
+﻿@if (displayPopUp)
 {
     <div class="modal-backdrop show"></div>
 
@@ -8,13 +8,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@Title</h5>
-                    <button @onclick="OnCancel" type="button" class="close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     @ChildContent
                 </div>
                 <div class="modal-footer">
-                    <button @onclick="OnConfirm" type="button" class="btn btn-danger">Delete</button>
+                    <button @onclick="OnConfirm" type="button" class="btn btn-danger">@NameAction</button>
                     <button @onclick="OnCancel" type="button" class="btn btn-primary">Cancel</button>
                 </div>
             </div>
@@ -23,14 +22,15 @@
 }
 
 @code {
-    bool displayConfirmation = false;
+    bool displayPopUp = false;
 
     [Parameter] public string Title { get; set; } = "Confirm";
+    [Parameter] public string NameAction { get; set; } = "Confirm";
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
-    public void Show() => displayConfirmation = true;
-    public void Hide() => displayConfirmation = false;
+    public void Show() => displayPopUp = true;
+    public void Hide() => displayPopUp = false;
 
 }

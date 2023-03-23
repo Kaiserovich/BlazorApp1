@@ -9,26 +9,50 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Create Data</th>
                 <th>Status</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
-            <GenericList ListOfItems="clients">
-                <ItemTemplate Context="client">
-                    <IndividualClient Client="client" IsTable="true" />
+            <GenericList ListOfItems="clients" >
+                <ItemTemplate Context="client" >
+                    <IndividualClient Client="client" IsTable="true" DeleteTheClient="DeleteTheClient" />
                 </ItemTemplate>
             </GenericList>
+            <PopUp @ref="popUp" NameAction="Delete" OnCancel="OnCancel" OnConfirm="OnConfirm">
+                <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id Name:@clientToBeDeleted.Name ?</div>
+            </PopUp>
         </tbody>
     </table>
 </div>
-
+<button class="btn btn-success">Add</button>
 @code {
     List<Client> clients;
-
+    PopUp popUp;
+    Client clientToBeDeleted;
     protected async override Task OnInitializedAsync()
     {
         clients = repository.GetAllClients();
+    }
+
+    void DeleteTheClient(Client client)
+    {
+        clientToBeDeleted = client;
+        popUp.Show();
+    }
+
+    void OnConfirm()
+    {
+        repository.DeleteClient(clientToBeDeleted);
+        popUp.Hide();
+        clientToBeDeleted = null;
+    }
+    void OnCancel()
+    {
+        popUp.Hide();
+        clientToBeDeleted = null;
     }
 }

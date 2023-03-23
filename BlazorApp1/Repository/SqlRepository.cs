@@ -35,12 +35,22 @@ namespace BlazorApp1.Repository
 
         public bool DeleteClient(Client client)
         {
-            throw new NotImplementedException();
+            if (client is null)
+                return false;
+
+            _dbContext.Remove(client);
+            _dbContext.SaveChanges();
+            return true;
         }
 
         public bool DeleteOrder(Order order)
         {
-            throw new NotImplementedException();
+            if (order is null)
+                return false;
+
+            _dbContext.Remove(order);
+            _dbContext.SaveChanges();
+            return true;
         }
 
         public bool EditClient(Client client)
