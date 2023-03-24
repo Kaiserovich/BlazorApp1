@@ -45,8 +45,8 @@
 
     protected override void OnInitialized()
     {
-        client = db.Client.GetClientById(ClientId);
-        ordersByClient = db.Order.GetOrdersByClientId(ClientId);
+        client = db.Client.GetClientByIdAsync(ClientId);
+        ordersByClient = db.Order.GetOrdersByClientIdAsync(ClientId);
     }
 
 }

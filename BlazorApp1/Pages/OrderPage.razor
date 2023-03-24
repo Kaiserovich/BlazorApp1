@@ -38,8 +38,8 @@
 
     protected override void OnInitialized()
     {
-        order = db.Order.GetOrderById(OrderId);
-        associatedClient = db.Client.GetClientById(order.ClientId);
+        order = db.Order.GetOrderByIdAsync(OrderId);
+        associatedClient = db.Client.GetClientByIdAsync(order.ClientId);
     }
 
 }

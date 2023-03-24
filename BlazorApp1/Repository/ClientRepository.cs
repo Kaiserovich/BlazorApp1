@@ -2,6 +2,7 @@
 using BlazorApp1.Contracts;
 using BlazorApp1.Entities;
 using BlazorApp1.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp1.Repository
 {
@@ -10,13 +11,13 @@ namespace BlazorApp1.Repository
     {
         public ClientRepository(AppDbContext dbContext) : base(dbContext) { }
 
-        public List<Client> GetAllClients()
+        public async Task<List<Client>> GetAllClientsAsync()
         {
-            return FindAll().ToList();
+            return await FindAll().ToListAsync();
         }
-        public Client GetClientById(int id)
+        public async Task<Client> GetClientByIdAsync(int id)
         {
-            return FindByCondition(a => a.Id.Equals(id)).First();
+            return await FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
         }
         public void CreateClient(Client client)
         {

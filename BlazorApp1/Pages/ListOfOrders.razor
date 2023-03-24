@@ -72,15 +72,15 @@
 
     protected async override Task OnInitializedAsync()
     {
-        orders = db.Order.GetAllOrders();
+        orders = db.Order.GetAllOrdersAsync();
     }
     void CreateNewOrder()
     {
-        if (db.Client.GetClientById(newOrder.ClientId) is null)
+        if (db.Client.GetClientByIdAsync(newOrder.ClientId) is null)
         {
             message = $"Client(ID:{newOrder.ClientId}) does not exist";
         }
-        else if (db.Client.GetClientById(newOrder.ClientId).Status != ClientStatus.Active)
+        else if (db.Client.GetClientByIdAsync(newOrder.ClientId).Status != ClientStatus.Active)
         {
             message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
         }

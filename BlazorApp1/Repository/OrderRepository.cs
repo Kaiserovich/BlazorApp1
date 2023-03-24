@@ -2,6 +2,7 @@
 using BlazorApp1.Contracts;
 using BlazorApp1.Entities;
 using BlazorApp1.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp1.Repository
 {
@@ -9,13 +10,17 @@ namespace BlazorApp1.Repository
     public class OrderRepository  : RepositoryBase<Order>, IOrderRepository
     {
         public OrderRepository(AppDbContext dbContext) : base(dbContext){}
-        public List<Order> GetAllOrders()
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return FindAll().ToList();
+            return await FindAll().ToListAsync();
         }
-        public Order GetOrderById(int id)
+        public async Task<List<Order>> GetOrdersByClientIdAsync(int clientId)
         {
-            return FindByCondition(a => a.Id.Equals(id)).First();
+            return await FindByCondition(a => a.ClientId.Equals(clientId)).ToListAsync();
+        }
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            return await FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
         }
         public void CreateOrder(Order order)
         {
@@ -28,11 +33,6 @@ namespace BlazorApp1.Repository
         public void DeleteOrder(Order order)
         {
             Delete(order);
-        }
-
-        public List<Order> GetOrdersByClientId(int clientId)
-        {
-            return FindByCondition(a => a.ClientId.Equals(clientId)).ToList();
         }
     }
 }

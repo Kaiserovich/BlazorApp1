@@ -7,6 +7,6 @@ namespace BlazorApp1.Contracts
     {
         IOrderRepository Order { get; }
         IClientRepository Client { get; }
-        void Save();
+        Task SaveAsync();
     }
 }

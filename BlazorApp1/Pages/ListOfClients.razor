@@ -54,7 +54,7 @@
     Client newClient = new();
     protected async override Task OnInitializedAsync()
     {
-        clients = db.Client.GetAllClients();
+        clients = db.Client.GetAllClientsAsync();
     }
     void DeleteTheClient(Client client)
     {
