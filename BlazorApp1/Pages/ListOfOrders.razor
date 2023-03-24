@@ -1,9 +1,9 @@
 ﻿@page "/orders"
-@inject BlazorApp1.Repository.IRepository repository
+@inject BlazorApp1.Repository.IRepository db
 
 <PageTitle>List of orders</PageTitle>
 
-<h3>List of orders</h3>
+<h2>List of orders</h2>
 
 <div class="table-responsive">
     <table class="table table-striped">
@@ -27,13 +27,78 @@
         </tbody>
     </table>
 </div>
+<div class="row col-6">
+    <div class="card-header">
+        <h3>Create a new order</H3>
+    </div>
 
+    <div class="card">
+        <div class="card-body">
+            <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
+                <DataAnnotationsValidator />
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Decription:</span>
+                    <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text"  class="form-control" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Price:</span>
+                    <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Client ID:</span>
+                    <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Currency ID:</span>
+                    <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <ValidationMessage For="(() => newOrder.Decription)" />
+                    <ValidationMessage For="(() => newOrder.Price)" />
+                    <ValidationMessage For="(() => newOrder.ClientId)" />
+                    <ValidationMessage For="(() => newOrder.CurrencyId)" />
+                </div>
+
+                <button class="btn btn-outline-success">Add</button>
+            </EditForm>
+        </div>
+</div>
+</div>
 
 @code {
     List<Order> orders;
+    Order newOrder = new();
+    string message;
 
     protected async override Task OnInitializedAsync()
     {
-        orders = repository.GetAllOrders();
+        orders = db.GetAllOrders();
+    }
+    void CreateNewOrder()
+    {
+        if (db.GetClientById(newOrder.ClientId) is null)
+        {
+            message = $"Client(ID:{newOrder.ClientId}) does not exist";
+        }
+        else if (db.GetClientById(newOrder.ClientId).Status != ClientStatus.Active)
+        {
+            message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
+        }
+        else
+        {
+            message = string.Empty;
+            Order order = new Order()
+                {
+                    Decription = newOrder.Decription,
+                    Date = DateTime.Now,
+                    Price = newOrder.Price,
+                    Status = 0,
+                    CurrencyId = newOrder.CurrencyId,
+                    ClientId = newOrder.ClientId
+
+                };
+            db.CreateOrder(order);
+            orders.Add(order);
+        }
     }
 }

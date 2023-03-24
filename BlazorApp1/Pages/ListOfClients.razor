@@ -29,14 +29,13 @@
 </div>
 <div class="row">
     <div class="col-6">
-        <EditForm Model="newClient" OnValidSubmit="CreateNewClient">
+        <EditForm Model="newClient" OnValidSubmit="CreateNewClient" class="form-control">
             <span>Create a new client</span>
             <DataAnnotationsValidator />
             <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Name:</span>
-                <InputText @bind-Value="newClient.Name" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+                <span class="input-group-text">Name:</span>
+                <InputText @bind-Value="newClient.Name" type="text" class="form-control" placeholder="Client name" />
                 <button class="btn btn-outline-success">Add</button>
-                <button class="btn btn-outline-">Add</button>
             </div>
             <ValidationMessage For="(() => newClient.Name)" />
         </EditForm>
@@ -53,7 +52,6 @@
     PopUp addPopUp;
     Client clientToBeDeleted;
     Client newClient = new();
-
     protected async override Task OnInitializedAsync()
     {
         clients = repository.GetAllClients();

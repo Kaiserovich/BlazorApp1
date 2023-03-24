@@ -2,30 +2,33 @@
 {
     @if (!IsTable)
     {
-        <EditForm Model="Client" OnValidSubmit="EditClient">
-            <div class="form-group">
+        <EditForm Model="Client" OnValidSubmit="EditClient" class="form-control">
+            <div class="row">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Name</label>
-
                     <input type="text" class="form-control" id="inputEmail3" placeholder="@Client.Name" readonly>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="row">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Create Data</label>
-                    <input type="date" class="form-control" id="inputEmail3" placeholder="@Client.DataCreate" readonly>
+                    <input type="datetime" class="form-control" id="inputEmail3" placeholder="@Client.DataCreate" readonly>
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="row mb-3">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Status</label>
-                    <input type="email" class="form-control" id="inputEmail3" placeholder="@Client.Status" readonly>
+                    <InputSelect @bind-Value=@Client.Status class="form-control">
+                        @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
                 </div>
             </div>
-
-            <div class="form-group row">
+            <div class="row gx-5">
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </EditForm>
@@ -35,7 +38,7 @@
         <tr>
             <td>@Client.Id</td>
             <td>@Client.Name</td>
-            <td>@Client.DataCreate.ToString("dd.MM.yyyy")</td>
+            <td>@Client.DataCreate</td>
             <td>@Client.Status</td>
             @if (IsWithButtons)
             {
@@ -57,6 +60,9 @@
     [Parameter] public EventCallback<Client> DeleteTheClient { get; set; }
 
     string url;
+    IEnumerable<ClientStatus> statuses = Enumerable.Empty<ClientStatus>();
+    IEnumerable<ClientStatus> unSelectedStatus => statuses.Where(status => status != Client.Status);
+
 
     protected override void OnInitialized()
     {
@@ -65,7 +71,7 @@
 
     void EditClient()
     {
-      
+
     }
 
 }
