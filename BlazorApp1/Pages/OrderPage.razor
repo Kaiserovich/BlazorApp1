@@ -1,6 +1,5 @@
 ﻿@page "/orders/{OrderId:int}"
-@using Microsoft.EntityFrameworkCore.Metadata.Internal;
-@inject BlazorApp1.Repository.IRepository db
+@inject IRepositoryWrapper db
 
 <PageTitle>Order #@order.Id</PageTitle>
 <h3>
@@ -39,8 +38,8 @@
 
     protected override void OnInitialized()
     {
-        order = db.GetOrderById(OrderId);
-        associatedClient = db.GetClientById(order.ClientId);
+        order = db.Order.GetOrderById(OrderId);
+        associatedClient = db.Client.GetClientById(order.ClientId);
     }
 
 }

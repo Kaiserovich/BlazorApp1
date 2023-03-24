@@ -1,5 +1,5 @@
 ﻿@page "/orders"
-@inject BlazorApp1.Repository.IRepository db
+@inject IRepositoryWrapper db
 
 <PageTitle>List of orders</PageTitle>
 
@@ -72,15 +72,15 @@
 
     protected async override Task OnInitializedAsync()
     {
-        orders = db.GetAllOrders();
+        orders = db.Order.GetAllOrders();
     }
     void CreateNewOrder()
     {
-        if (db.GetClientById(newOrder.ClientId) is null)
+        if (db.Client.GetClientById(newOrder.ClientId) is null)
         {
             message = $"Client(ID:{newOrder.ClientId}) does not exist";
         }
-        else if (db.GetClientById(newOrder.ClientId).Status != ClientStatus.Active)
+        else if (db.Client.GetClientById(newOrder.ClientId).Status != ClientStatus.Active)
         {
             message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
         }
@@ -97,7 +97,7 @@
                     ClientId = newOrder.ClientId
 
                 };
-            db.CreateOrder(order);
+            db.Order.CreateOrder(order);
             orders.Add(order);
         }
     }

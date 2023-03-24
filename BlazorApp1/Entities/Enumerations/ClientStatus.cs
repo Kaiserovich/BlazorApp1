@@ -1,4 +1,4 @@
-﻿namespace BlazorApp1.Entities.Models
+﻿namespace BlazorApp1.Entities.Enumerations
 {
     public enum ClientStatus
     {

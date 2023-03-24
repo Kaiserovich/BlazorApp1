@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BlazorApp1.Entities.Enumerations;
 
 namespace BlazorApp1.Entities.Models
 {

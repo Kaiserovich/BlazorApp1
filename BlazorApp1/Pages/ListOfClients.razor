@@ -1,5 +1,5 @@
 ﻿@page "/clients"
-@inject BlazorApp1.Repository.IRepository repository
+@inject IRepositoryWrapper db
 
 <PageTitle>List of clients</PageTitle>
 
@@ -54,7 +54,7 @@
     Client newClient = new();
     protected async override Task OnInitializedAsync()
     {
-        clients = repository.GetAllClients();
+        clients = db.Client.GetAllClients();
     }
     void DeleteTheClient(Client client)
     {
@@ -66,7 +66,7 @@
     }
     void OnDeleteConfirm()
     {
-        repository.DeleteClient(clientToBeDeleted);
+        db.Client.DeleteClient(clientToBeDeleted);
         clients.Remove(clientToBeDeleted);
         clientToBeDeleted = null;
         deletePopUp.Hide();
@@ -84,7 +84,7 @@
                 DataCreate = DateTime.Now,
                 Status = 0
             };
-        repository.CreateClient(client);
+        db.Client.CreateClient(client);
         clients.Add(client);
     }
 }
