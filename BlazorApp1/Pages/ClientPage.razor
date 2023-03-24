@@ -1,11 +1,10 @@
 ﻿@page "/clients/{ClientId:int}"
 @inject IRepositoryWrapper db
 
-<PageTitle>@client.Name</PageTitle>
+@*<PageTitle>@client.Name</PageTitle>*@
 <h3>
     Client page
 </h3>
-
 <div class="row">
     <div class="col">
         <IndividualClient Client="client" IsTable="false"></IndividualClient>
@@ -40,13 +39,12 @@
 @code {
     [Parameter] public int ClientId { get; set; }
 
-    Client client;
+    Client? client;
     List<Order> ordersByClient;
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        client = db.Client.GetClientByIdAsync(ClientId);
-        ordersByClient = db.Order.GetOrdersByClientIdAsync(ClientId);
+        client = await db.Client.GetClientByIdAsync(ClientId);
+        ordersByClient = await db.Order.GetOrdersByClientIdAsync(ClientId);
     }
-
 }

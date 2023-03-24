@@ -4,66 +4,68 @@
 <PageTitle>List of orders</PageTitle>
 
 <h2>List of orders</h2>
-
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Order Id</th>
-                <th>Client Id</th>
-                <th>Decription</th>
-                <th>Date</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Currency Id</th>
-            </tr>
-        </thead>
-        <tbody>
-            <GenericList ListOfItems="orders">
-                <ItemTemplate Context="order">
-                    <IndividualOrder Order="order" IsTable="true" />
-                </ItemTemplate>
-            </GenericList>
-        </tbody>
-    </table>
-</div>
-<div class="row col-6">
-    <div class="card-header">
-        <h3>Create a new order</H3>
+  <div class="row">
+    <div class="col">
+      <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Client Id</th>
+                            <th>Decription</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Currency Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <GenericList ListOfItems="orders">
+                            <ItemTemplate Context="order">
+                                <IndividualOrder Order="order" IsTable="true" />
+                            </ItemTemplate>
+                        </GenericList>
+                    </tbody>
+                </table>
+            </div>
     </div>
-
-    <div class="card">
-        <div class="card-body">
-            <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
-                <DataAnnotationsValidator />
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Decription:</span>
-                    <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text"  class="form-control" />
+    <div class="col col-4">
+      <div class="card-header">
+                <h3>Create a new order</H3>
+            </div> 
+            <div class="card">
+                <div class="card-body">
+                    <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
+                        <DataAnnotationsValidator />
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Decription:</span>
+                            <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text"  class="form-control" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Price:</span>
+                            <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Client ID:</span>
+                            <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Currency ID:</span>
+                            <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <ValidationMessage For="(() => newOrder.Decription)" />
+                            <ValidationMessage For="(() => newOrder.Price)" />
+                            <ValidationMessage For="(() => newOrder.ClientId)" />
+                            <ValidationMessage For="(() => newOrder.CurrencyId)" />
+                        </div>
+                        <button class="btn btn-outline-success">Add</button>
+                        <span class="text-danger">@message</span>
+                    </EditForm>
                 </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Price:</span>
-                    <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Client ID:</span>
-                    <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Currency ID:</span>
-                    <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <ValidationMessage For="(() => newOrder.Decription)" />
-                    <ValidationMessage For="(() => newOrder.Price)" />
-                    <ValidationMessage For="(() => newOrder.ClientId)" />
-                    <ValidationMessage For="(() => newOrder.CurrencyId)" />
-                </div>
-
-                <button class="btn btn-outline-success">Add</button>
-            </EditForm>
-        </div>
-</div>
-</div>
+            </div>
+    </div>
+  </div>
 
 @code {
     List<Order> orders;
@@ -72,18 +74,21 @@
 
     protected async override Task OnInitializedAsync()
     {
-        orders = db.Order.GetAllOrdersAsync();
+        orders = await db.Order.GetAllOrdersAsync();
     }
-    void CreateNewOrder()
+
+    async Task CreateNewOrder()
     {
-        if (db.Client.GetClientByIdAsync(newOrder.ClientId) is null)
+        Client assosiateClient = await db.Client.GetClientByIdAsync(newOrder.ClientId);
+        if (assosiateClient is null)
         {
             message = $"Client(ID:{newOrder.ClientId}) does not exist";
+
         }
-        else if (db.Client.GetClientByIdAsync(newOrder.ClientId).Status != ClientStatus.Active)
-        {
-            message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
-        }
+         else if (assosiateClient.Status != ClientStatus.Active)
+             {
+             message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
+         }
         else
         {
             message = string.Empty;
@@ -97,7 +102,9 @@
                     ClientId = newOrder.ClientId
 
                 };
+
             db.Order.CreateOrder(order);
+            await db.SaveAsync();
             orders.Add(order);
         }
     }

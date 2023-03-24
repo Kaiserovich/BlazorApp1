@@ -4,31 +4,33 @@
 <PageTitle>List of clients</PageTitle>
 
 <h2>List of clients</h2>
-<div class="table-responsive">
-    <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Create Data</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <GenericList ListOfItems="clients">
-                <ItemTemplate Context="client">
-                    <IndividualClient Client="client" IsTable="true" DeleteTheClient="DeleteTheClient" />
-                </ItemTemplate>
-            </GenericList>
-            <PopUp @ref="deletePopUp" NameAction="Delete" OnCancel="OnDeleteCancel" OnConfirm="OnDeleteConfirm">
-                <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id Name:@clientToBeDeleted.Name ?</div>
-            </PopUp>
-        </tbody>
-    </table>
-</div>
 <div class="row">
-    <div class="col-6">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Create Data</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <GenericList ListOfItems="clients">
+                        <ItemTemplate Context="client">
+                            <IndividualClient Client="client" IsTable="true" DeleteTheClient="DeleteTheClient" />
+                        </ItemTemplate>
+                    </GenericList>
+                    <PopUp @ref="deletePopUp" NameAction="Delete" OnCancel="OnDeleteCancel" OnConfirm="OnDeleteConfirm">
+                        <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id Name:@clientToBeDeleted.Name ?</div>
+                    </PopUp>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-4">
         <EditForm Model="newClient" OnValidSubmit="CreateNewClient" class="form-control">
             <span>Create a new client</span>
             <DataAnnotationsValidator />
@@ -54,7 +56,7 @@
     Client newClient = new();
     protected async override Task OnInitializedAsync()
     {
-        clients = db.Client.GetAllClientsAsync();
+        clients = await db.Client.GetAllClientsAsync();
     }
     void DeleteTheClient(Client client)
     {
@@ -67,16 +69,18 @@
     void OnDeleteConfirm()
     {
         db.Client.DeleteClient(clientToBeDeleted);
+        db.SaveAsync();
         clients.Remove(clientToBeDeleted);
         clientToBeDeleted = null;
         deletePopUp.Hide();
+
     }
     void OnDeleteCancel()
     {
         clientToBeDeleted = null;
         deletePopUp.Hide();
     }
-    void CreateNewClient()
+    async Task CreateNewClient()
     {
         Client client = new Client()
             {
@@ -85,6 +89,7 @@
                 Status = 0
             };
         db.Client.CreateClient(client);
+        await db.SaveAsync();
         clients.Add(client);
     }
 }

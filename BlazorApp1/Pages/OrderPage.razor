@@ -36,10 +36,10 @@
     Order order;
     Client associatedClient;
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-        order = db.Order.GetOrderByIdAsync(OrderId);
-        associatedClient = db.Client.GetClientByIdAsync(order.ClientId);
+        order = await db.Order.GetOrderByIdAsync(OrderId);
+        associatedClient = await db.Client.GetClientByIdAsync(order.ClientId);
     }
 
 }
