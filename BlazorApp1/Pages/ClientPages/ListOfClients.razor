@@ -20,7 +20,7 @@
                 <tbody>
                     <GenericList ListOfItems="clients">
                         <ItemTemplate Context="client">
-                            <IndividualClient Client="client" IsTable="true" DeleteTheClient="DeleteTheClient" />
+                            <RowClient Client="client" DeleteTheClient="DeleteTheClient" />
                         </ItemTemplate>
                     </GenericList>
                     <PopUp @ref="deletePopUp" NameAction="Delete" OnCancel="OnDeleteCancel" OnConfirm="OnDeleteConfirm">

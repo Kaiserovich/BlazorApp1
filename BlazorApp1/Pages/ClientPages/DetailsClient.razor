@@ -1,0 +1,57 @@
+﻿@page "/clients/{ClientId:int}"
+@inject IRepositoryWrapper db
+
+@if (client is not null)
+{
+    <PageTitle>@client.Name</PageTitle>
+    <h3>
+        Client page
+    </h3>
+    <div class="row">
+        <div class="col">
+            <IndividualClient Client="client"/>
+        </div>
+
+        <div class="col">
+            <h4>Orders of the selected client</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Decription</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Currency Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <GenericList ListOfItems="ordersByClient">
+                            <ItemTemplate Context="order">
+                                <RowOrder Order="order" IsVisibleClientId="false" />
+                            </ItemTemplate>
+                        </GenericList>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <NotFound/>
+}
+
+@code {
+    [Parameter] public int ClientId { get; set; }
+
+    Client? client;
+    List<Order> ordersByClient;
+
+    protected async override Task OnInitializedAsync()
+    {
+        client = await db.Client.GetClientByIdAsync(ClientId);
+        ordersByClient = await db.Order.GetOrdersByClientIdAsync(ClientId);
+    }
+}

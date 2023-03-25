@@ -22,7 +22,7 @@
                     <tbody>
                         <GenericList ListOfItems="orders">
                             <ItemTemplate Context="order">
-                                <IndividualOrder Order="order" IsTable="true" DeleteTheOrder="DeleteTheOrder" />
+                                <RowOrder Order="order" DeleteTheOrder="DeleteTheOrder" />
                             </ItemTemplate>
                         </GenericList>
                         <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirm" OnCancel="OnDeleteCancel">
@@ -32,41 +32,43 @@
                 </table>
             </div>
     </div>
+
     <div class="col col-4">
-      <div class="card-header">
-                <h3>Create a new order</H3>
-            </div> 
-            <div class="card">
-                <div class="card-body">
-                    <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
-                        <DataAnnotationsValidator />
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Decription:</span>
-                            <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text"  class="form-control" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Price:</span>
-                            <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Client ID:</span>
-                            <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Currency ID:</span>
-                            <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
-                        </div>
-                        <div class="mb-3">
-                            <ValidationMessage For="(() => newOrder.Decription)" />
-                            <ValidationMessage For="(() => newOrder.Price)" />
-                            <ValidationMessage For="(() => newOrder.ClientId)" />
-                            <ValidationMessage For="(() => newOrder.CurrencyId)" />
-                        </div>
-                        <button class="btn btn-outline-success">Add</button>
-                        <span class="text-danger">@message</span>
-                    </EditForm>
-                </div>
+        <div class="card-header">
+            <h3>Create a new order</H3>
+        </div> 
+
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
+                    <DataAnnotationsValidator />
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Decription:</span>
+                        <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text"  class="form-control" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Price:</span>
+                        <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Client ID:</span>
+                        <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Currency ID:</span>
+                        <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <ValidationMessage For="(() => newOrder.Decription)" />
+                        <ValidationMessage For="(() => newOrder.Price)" />
+                        <ValidationMessage For="(() => newOrder.ClientId)" />
+                        <ValidationMessage For="(() => newOrder.CurrencyId)" />
+                    </div>
+                    <button class="btn btn-outline-success">Add</button>
+                    <span class="text-danger">@message</span>
+                </EditForm>
             </div>
+        </div>
     </div>
   </div>
 
