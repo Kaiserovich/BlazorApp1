@@ -1,34 +1,38 @@
-﻿@if (Client != null)
+﻿@inject IRepositoryWrapper db
+
+@if (Client != null)
 {
     @if (!IsTable)
     {
-        <EditForm Model="Client" OnValidSubmit="EditClient" class="form-control">
+        <EditForm Model="Client" class="form-control">
             <div class="row">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Name</label>
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="@Client.Name" readonly>
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="@Client.Name" disabled>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Create Data</label>
-                    <input type="datetime" class="form-control" id="inputEmail3" placeholder="@Client.DataCreate" readonly>
+                    <input type="datetime" class="form-control" id="inputEmail3" placeholder="@Client.DataCreate" disabled>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-sm-10">
                     <label class="col-sm-2 col-form-label">Status</label>
-                    @*<InputSelect @bind-Value=@Client.Status class="form-control">
+                    <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledSaveButton">
                         @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
                         {
                             <option value="@status">@status</option>
                         }
-                    </InputSelect>*@
+                    </InputSelect>
                 </div>
             </div>
             <div class="row gx-5">
                 <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditClient())" disabled="@isDisabledEditButton">Edit</button>
+                    <button type="submit" class="btn btn-primary" @onclick="@(() => EditClient())"  disabled="@isDisabledSaveButton">Save</button>
+                    <label class="col-sm-2 col-form-label text-success">@message</label>
                 </div>
             </div>
         </EditForm>
@@ -58,17 +62,29 @@
 
     [Parameter] public EventCallback<Client> DeleteTheClient { get; set; }
 
+    bool isDisabledSaveButton = true;
+    bool isDisabledEditButton = false;
     string url;
+    string message;
 
     protected override void OnInitialized()
     {
         if (Client is not null)
             url = $"clients/{Client.Id}";
     }
-
-    void EditClient()
+    void StartEditClient()
     {
-
+        isDisabledSaveButton = !isDisabledSaveButton;
+        isDisabledEditButton = !isDisabledEditButton;
+        message = string.Empty;
+    }
+    async void EditClient()
+    {
+        db.Client.Update(Client);
+        await db.SaveAsync();
+        message = "Success";
+        isDisabledSaveButton = !isDisabledSaveButton;
+        isDisabledEditButton = !isDisabledEditButton;
     }
 
 }

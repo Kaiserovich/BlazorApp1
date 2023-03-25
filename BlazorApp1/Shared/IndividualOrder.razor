@@ -26,6 +26,13 @@
             <td>@Order.Price</td>
             <td>@Order.Status</td>
             <td>@Order.CurrencyId</td>
+            @if (IsWithButtons)
+            {
+                <td>
+                    <a class="btn btn-success" href="@url">Open</a>
+                    <button class="btn btn-danger" @onclick="(() => DeleteTheOrder.InvokeAsync(Order))">Delete</button>
+                </td>
+            }
         </tr>
     }
 }
@@ -34,5 +41,15 @@
     [Parameter] public bool IsTable { get; set; }
     [Parameter] public bool IsWithButtons { get; set; } = true;
     [Parameter] public bool IsVisibleClientId { get; set; } = true;
+
+    [Parameter] public EventCallback<Client> DeleteTheOrder { get; set; }
+
+    string url;
+
+    protected override void OnInitialized()
+    {
+        if (Order is not null)
+            url = $"clients/{Order.Id}";
+    }
 
 }
