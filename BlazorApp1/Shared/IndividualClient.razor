@@ -74,15 +74,20 @@
     }
     void StartEditClient()
     {
-        isDisabledSaveButton = !isDisabledSaveButton;
-        isDisabledEditButton = !isDisabledEditButton;
+        ChangeEditAndSaveButtonsState();
         message = string.Empty;
     }
     async void EditClient()
     {
         db.Client.Update(Client);
         await db.SaveAsync();
+
+        ChangeEditAndSaveButtonsState();
         message = "Success";
+        
+    }
+    void ChangeEditAndSaveButtonsState()
+    {
         isDisabledSaveButton = !isDisabledSaveButton;
         isDisabledEditButton = !isDisabledEditButton;
     }

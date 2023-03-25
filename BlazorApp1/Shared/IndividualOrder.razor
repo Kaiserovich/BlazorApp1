@@ -42,14 +42,14 @@
     [Parameter] public bool IsWithButtons { get; set; } = true;
     [Parameter] public bool IsVisibleClientId { get; set; } = true;
 
-    [Parameter] public EventCallback<Client> DeleteTheOrder { get; set; }
+    [Parameter] public EventCallback<Order> DeleteTheOrder { get; set; }
 
     string url;
 
     protected override void OnInitialized()
     {
         if (Order is not null)
-            url = $"clients/{Order.Id}";
+            url = $"orders/{Order.Id}";
     }
 
 }

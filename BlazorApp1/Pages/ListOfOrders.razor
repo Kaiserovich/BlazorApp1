@@ -22,9 +22,12 @@
                     <tbody>
                         <GenericList ListOfItems="orders">
                             <ItemTemplate Context="order">
-                                <IndividualOrder Order="order" IsTable="true" />
+                                <IndividualOrder Order="order" IsTable="true" DeleteTheOrder="DeleteTheOrder" />
                             </ItemTemplate>
                         </GenericList>
+                        <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirm" OnCancel="OnDeleteCancel">
+                            <div class="text-danger">Do you wish to delete order: ID:@orderToBeDeleted.Id ?</div>
+                        </PopUp>
                     </tbody>
                 </table>
             </div>
@@ -70,6 +73,8 @@
 @code {
     List<Order> orders;
     Order newOrder = new();
+    Order orderToBeDeleted;
+    PopUp deletePopUp;
     string message;
 
     protected async override Task OnInitializedAsync()
@@ -85,10 +90,10 @@
             message = $"Client(ID:{newOrder.ClientId}) does not exist";
 
         }
-         else if (assosiateClient.Status != ClientStatus.Active)
-             {
-             message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
-         }
+        else if (assosiateClient.Status != ClientStatus.Active)
+        {
+            message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
+        }
         else
         {
             message = string.Empty;
@@ -107,5 +112,26 @@
             await db.SaveAsync();
             orders.Add(order);
         }
+    }
+    void DeleteTheOrder(Order order)
+    {
+        if (order != null)
+        {
+            orderToBeDeleted = order;
+            deletePopUp.Show();
+        }
+    }
+    void OnDeleteConfirm()
+    {
+        db.Order.DeleteOrder(orderToBeDeleted);
+        db.SaveAsync();
+        orders.Remove(orderToBeDeleted);
+        OnDeleteCancel();
+
+    }
+        void OnDeleteCancel()
+    {
+        orderToBeDeleted = null;
+        deletePopUp.Hide();
     }
 }
