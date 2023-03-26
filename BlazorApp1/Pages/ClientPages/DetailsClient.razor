@@ -52,6 +52,6 @@ else
     protected async override Task OnInitializedAsync()
     {
         client = await db.Client.GetClientByIdAsync(ClientId);
-        ordersByClient = await db.Order.GetOrdersByClientIdAsync(ClientId);
+        ordersByClient = db.Order.GetOrdersByClientId(ClientId);
     }
 }

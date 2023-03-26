@@ -34,6 +34,7 @@
                     </div>
                 }
                 <ValidationMessage For="(() => Client.Name)" />
+                <span class="text-danger">@message</span>
             </EditForm>
             @if (!isEditMode)
             {
@@ -56,18 +57,29 @@
     bool isDisabledInputs = true;
     bool isEditMode = false;
     bool displaySuccessMessage = false;
+    string message = "34";
 
     void StartEditClient()
     {
         displaySuccessMessage = false;
         ChangeEditAndSaveButtonsState();
     }
-    async void EditClient()
+    void EditClient()
     {
-        db.Client.Update(Client);
-        ChangeEditAndSaveButtonsState();
-        displaySuccessMessage = true;
-        await db.SaveAsync();
+        if (Client.Status == ClientStatus.Inactive && db.Order.GetOrdersByClientId(Client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
+        {
+            message = $"The client has orders in a new status. So the client's status be changed";
+        }
+        else
+        {
+            message = string.Empty;
+            ChangeEditAndSaveButtonsState();
+            displaySuccessMessage = true;
+
+
+            db.Client.Update(Client);
+            db.SaveAsync();
+        }
     }
     void ChangeEditAndSaveButtonsState()
     {

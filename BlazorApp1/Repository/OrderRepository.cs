@@ -14,9 +14,9 @@ namespace BlazorApp1.Repository
         {
             return await FindAll().ToListAsync();
         }
-        public async Task<List<Order>> GetOrdersByClientIdAsync(int clientId)
+        public List<Order> GetOrdersByClientId(int clientId)
         {
-            return await FindByCondition(a => a.ClientId.Equals(clientId)).ToListAsync();
+            return FindByCondition(a => a.ClientId.Equals(clientId)).ToList();
         }
         public async Task<Order> GetOrderByIdAsync(int id)
         {

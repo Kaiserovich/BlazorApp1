@@ -57,12 +57,12 @@
         Client assosiateClient = await db.Client.GetClientByIdAsync(newOrder.ClientId);
         if (assosiateClient is null)
         {
-            message = $"Client(ID:{newOrder.ClientId}) does not exist";
+            message = $"The client(ID:{newOrder.ClientId}) does not exist";
 
         }
         else if (assosiateClient.Status != ClientStatus.Active)
         {
-            message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
+            message = $"The client(ID:{newOrder.ClientId}) does not have an active status";
         }
         else
         {

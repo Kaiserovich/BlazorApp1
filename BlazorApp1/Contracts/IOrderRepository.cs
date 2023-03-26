@@ -5,7 +5,7 @@ namespace BlazorApp1.Contracts
     public interface IOrderRepository : IRepositoryBase<Order>
     {
         Task<List<Order>> GetAllOrdersAsync();
-        Task<List<Order>> GetOrdersByClientIdAsync(int clientId);
+        List<Order> GetOrdersByClientId(int clientId);
         Task<Order> GetOrderByIdAsync(int id);
         void CreateOrder(Order order);
         void UpadateOrder(Order order);
