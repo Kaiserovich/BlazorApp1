@@ -3,62 +3,56 @@
 @if (Client != null)
 {
     <EditForm Model="Client" class="form-control">
-        <div class="row">
-            <div class="col-sm-10">
-                <label class="col-sm-2 col-form-label">Name</label>
-                <input type="text" class="form-control" id="inputEmail3" placeholder="@Client.Name" disabled>
-            </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Id:</span>
+            <InputNumber @bind-Value="Client.Id" class="form-control" disabled />
         </div>
-        <div class="row">
-            <div class="col-sm-10">
-                <label class="col-sm-2 col-form-label">Create Data</label>
-                <input type="datetime" class="form-control" id="inputEmail3" placeholder="@Client.DataCreate" disabled>
-            </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Name:</span>
+            <InputText @bind-Value="Client.Name" class="form-control" disabled="@isDisabledSaveButton"/>
         </div>
-        <div class="row mb-3">
-            <div class="col-sm-10">
-                <label class="col-sm-2 col-form-label">Status</label>
-                <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledSaveButton">
-                    @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
-                    {
-                        <option value="@status">@status</option>
-                    }
-                </InputSelect>
-            </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Create Data:</span>
+            <InputDate @bind-Value="Client.DataCreate" class="form-control" disabled/>
         </div>
-        <div class="row gx-5">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditClient())" disabled="@isDisabledEditButton">Edit</button>
-                <button type="submit" class="btn btn-primary" @onclick="@(() => EditClient())" disabled="@isDisabledSaveButton">Save</button>
-                <label class="col-sm-2 col-form-label text-success">@message</label>
-            </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Status:</span>
+            <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledSaveButton">
+                @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </InputSelect>
         </div>
+        <div class="input-group mb-3">
+            <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditClient())" disabled="@isDisabledEditButton">Edit</button>
+            <button type="submit" class="btn btn-primary" @onclick="@(() => EditClient())" disabled="@isDisabledSaveButton">Save</button>
+        </div>
+        @if (displaySuccessMessage)
+        {
+            <SuccessMessage />
+        }
     </EditForm>
 }
 @code {
     [Parameter] public Client Client { get; set; }
-    [Parameter] public bool IsTable { get; set; }
-    [Parameter] public bool IsWithButtons { get; set; } = true;
-
-    [Parameter] public EventCallback<Client> DeleteTheClient { get; set; }
 
     bool isDisabledSaveButton = true;
     bool isDisabledEditButton = false;
-    string message;
+    bool displaySuccessMessage = false;
 
     void StartEditClient()
     {
+        displaySuccessMessage = false;
         ChangeEditAndSaveButtonsState();
-        message = string.Empty;
     }
     async void EditClient()
     {
+        ChangeEditAndSaveButtonsState();
+        displaySuccessMessage = true;
+
         db.Client.Update(Client);
         await db.SaveAsync();
-
-        ChangeEditAndSaveButtonsState();
-        message = "Success";
-
     }
     void ChangeEditAndSaveButtonsState()
     {

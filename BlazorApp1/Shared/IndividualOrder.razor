@@ -1,16 +1,84 @@
-﻿@if (Order != null)
+﻿@inject IRepositoryWrapper db
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+    </symbol>
+</svg>
+
+@if (Order != null)
 {
-    <div class="row text-center alert alert-info">
-        <div class="col">
-            <p>@Order.ClientId</p>
-            <p>@Order.Decription</p>
-            <p>@Order.Date</p>
-            <p>@Order.Price</p>
-            <p>@Order.Status</p>
-            <p>@Order.CurrencyId</p>
+   <EditForm Model="Order" class="form-control">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Id:</span>
+            <InputNumber @bind-Value="Order.Id" class="form-control" disabled />
         </div>
-    </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Decription:</span>
+            <InputText @bind-Value="Order.Decription" class="form-control" disabled="@isDisabledSaveButton"/>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Date:</span>
+            <InputDate @bind-Value="Order.Date" class="form-control" disabled />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Price:</span>
+            <InputNumber @bind-Value="Order.Price" class="form-control" disabled />
+        </div>
+                <div class="input-group mb-3">
+            <span class="input-group-text">Client ID:</span>
+            <InputNumber @bind-Value="Order.ClientId" class="form-control" disabled />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Currency ID:</span>
+            <InputNumber @bind-Value="Order.CurrencyId" class="form-control" disabled />
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Status:</span>
+            <InputSelect @bind-Value=@Order.Status class="form-control" disabled="@isDisabledSaveButton">
+                @foreach (var status in Enum.GetValues(typeof(OrderStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="input-group mb-3">
+            <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditOrder())" disabled="@isDisabledEditButton">Edit</button>
+            <button type="submit" class="btn btn-primary" @onclick="@(() => EditOrder())" disabled="@isDisabledSaveButton">Save</button>
+
+            
+        </div>
+        @if (displaySuccessMessage)
+        {
+            <SuccessMessage />
+        }
+    </EditForm>
 }
 @code {
     [Parameter] public Order Order { get; set; }
+
+    bool isDisabledSaveButton = true;
+    bool isDisabledEditButton = false;
+    string messageSuccessMessage = "Success";
+    bool displaySuccessMessage = false;
+
+    void StartEditOrder()
+    {
+        ChangeEditAndSaveButtonsState();
+        displaySuccessMessage = false;
+    }
+    async void EditOrder()
+    {
+        ChangeEditAndSaveButtonsState();
+        displaySuccessMessage = true;
+
+        db.Order.Update(Order);
+        await db.SaveAsync();
+
+    }
+    void ChangeEditAndSaveButtonsState()
+    {
+        isDisabledSaveButton = !isDisabledSaveButton;
+        isDisabledEditButton = !isDisabledEditButton;
+    }
 }

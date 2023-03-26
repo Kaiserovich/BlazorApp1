@@ -1,4 +1,4 @@
-﻿@if (displayPopUp)
+﻿@if (display)
 {
     <div class="modal-backdrop show"></div>
 
@@ -22,7 +22,7 @@
 }
 
 @code {
-    bool displayPopUp = false;
+    bool display = false;
 
     [Parameter] public string Title { get; set; } = "Confirm";
     [Parameter] public string NameAction { get; set; } = "Confirm";
@@ -30,7 +30,7 @@
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
-    public void Show() => displayPopUp = true;
-    public void Hide() => displayPopUp = false;
+    public void Show() => display = true;
+    public void Hide() => display = false;
 
 }

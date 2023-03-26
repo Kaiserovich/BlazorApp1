@@ -38,7 +38,6 @@
             <h3>Create a new order</H3>
         </div> 
 
-        <div class="card">
             <div class="card-body">
                 <EditForm Model="newOrder" OnValidSubmit="CreateNewOrder" class="form-control">
                     <DataAnnotationsValidator />
@@ -64,10 +63,17 @@
                         <ValidationMessage For="(() => newOrder.ClientId)" />
                         <ValidationMessage For="(() => newOrder.CurrencyId)" />
                     </div>
-                    <button class="btn btn-outline-success">Add</button>
-                    <span class="text-danger">@message</span>
+                    <div class="mb-3">
+                        <button class="btn btn-outline-success">Add</button>
+                        <span class="text-danger">@message</span>
+                    </div>
+                    
+                    @if (displaySuccessMessage)
+                    {
+                        <SuccessMessage/>
+                    }
                 </EditForm>
-            </div>
+                
         </div>
     </div>
   </div>
@@ -78,6 +84,7 @@
     Order orderToBeDeleted;
     PopUp deletePopUp;
     string message;
+    bool displaySuccessMessage = false;
 
     protected async override Task OnInitializedAsync()
     {
@@ -98,6 +105,7 @@
         }
         else
         {
+            displaySuccessMessage = true;
             message = string.Empty;
             Order order = new Order()
                 {
