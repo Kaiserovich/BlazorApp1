@@ -1,23 +1,28 @@
 ﻿@inject IRepositoryWrapper db
 
-<EditForm Model="newClient" OnValidSubmit="CreateNewClient" class="form-control">
-            <div class="card-header">
-                <h3>Create a new order</H3>
-            </div> 
-            <DataAnnotationsValidator />
-            <div class="card-body">
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Name:</span>
-                    <InputText @bind-Value="newClient.Name" type="text" class="form-control" placeholder="Client name" />
-                    <button class="btn btn-outline-success">Add</button>
-                </div>
-                <ValidationMessage For="(() => newClient.Name)" />
+<EditForm Model="newClient" OnValidSubmit="CreateNewClientAsync">
+    <div class="card">
+        <div class="card-header">
+            <h3>Create a new order</H3>
+        </div> 
+
+        <DataAnnotationsValidator />
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Name:</span>
+                <InputText @bind-Value="newClient.Name" class="form-control" placeholder="Client name" />
+                <button class="btn btn-outline-success">Add</button>
             </div>
-            @if (displaySuccessMessage)
-            {
-                <SuccessMessage />
-            }
-        </EditForm>
+            <ValidationMessage For="(() => newClient.Name)" />
+    
+        @if (displaySuccessMessage)
+        {
+            <SuccessMessage />
+        }
+        </div>
+    </div>
+</EditForm>
+
 
 
 @code {
@@ -27,7 +32,7 @@
     Client newClient = new();
     bool displaySuccessMessage = false;
 
-    async Task CreateNewClient()
+    async Task CreateNewClientAsync()
     {
         displaySuccessMessage = true;
         Client client = new Client()

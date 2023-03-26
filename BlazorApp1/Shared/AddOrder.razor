@@ -1,0 +1,89 @@
+﻿@inject IRepositoryWrapper db
+
+<div class="card">
+    <div class="card-header">
+        <h3>Create a new order</H3>
+    </div> 
+
+    <div class="card-body">
+        <EditForm Model="newOrder" OnValidSubmit="CreateNewOrderAsync" >
+            <DataAnnotationsValidator />
+            <div class="input-group mb-3">
+                <span class="input-group-text">Decription:</span>
+                <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text" class="form-control" />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Price:</span>
+                <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Client ID:</span>
+                <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Currency ID:</span>
+                <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <ValidationMessage For="(() => newOrder.Decription)" />
+                <ValidationMessage For="(() => newOrder.Price)" />
+                <ValidationMessage For="(() => newOrder.ClientId)" />
+                <ValidationMessage For="(() => newOrder.CurrencyId)" />
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-outline-success">Add</button>
+                <span class="text-danger">@message</span>
+            </div>
+
+            @if (displaySuccessMessage)
+            {
+                <SuccessMessage />
+            }
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter] public EventCallback<Order> AddTheOrder { get; set; }
+
+    Order newOrder = new();
+    bool displaySuccessMessage = false;
+    string message;
+
+    async Task CreateNewOrderAsync()
+    {
+        Client assosiateClient = await db.Client.GetClientByIdAsync(newOrder.ClientId);
+        if (assosiateClient is null)
+        {
+            message = $"Client(ID:{newOrder.ClientId}) does not exist";
+
+        }
+        else if (assosiateClient.Status != ClientStatus.Active)
+        {
+            message = $"Client(ID:{newOrder.ClientId}) does not have an active status";
+        }
+        else
+        {
+            displaySuccessMessage = true;
+            message = string.Empty;
+            Order order = new Order()
+                {
+                    Decription = newOrder.Decription,
+                    Date = DateTime.Now,
+                    Price = newOrder.Price,
+                    Status = 0,
+                    CurrencyId = newOrder.CurrencyId,
+                    ClientId = newOrder.ClientId
+
+                };
+
+            db.Order.CreateOrder(order);
+            await db.SaveAsync();
+
+            await AddTheOrder.InvokeAsync(order);
+
+        }
+    }
+}

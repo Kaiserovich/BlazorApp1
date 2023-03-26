@@ -22,7 +22,7 @@
                             <RowClient Client="client" DeleteTheClient="DeleteTheClient" />
                         </ItemTemplate>
                     </GenericList>
-                    <PopUp @ref="deletePopUp" NameAction="Delete" OnCancel="OnDeleteCancel" OnConfirm="OnDeleteConfirm">
+                    <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirmAsync" OnCancel="OnDeleteCancel">
                         <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id Name:@clientToBeDeleted.Name ?</div>
                     </PopUp>
                 </tbody>
@@ -56,18 +56,16 @@
             deletePopUp.Show();
         }
     }
-    void OnDeleteConfirm()
+    async void OnDeleteConfirmAsync()
     {
-        db.Client.DeleteClient(clientToBeDeleted);
-        db.SaveAsync();
         clients.Remove(clientToBeDeleted);
-        clientToBeDeleted = null;
         deletePopUp.Hide();
 
+        db.Client.DeleteClient(clientToBeDeleted);
+        await db.SaveAsync();
     }
     void OnDeleteCancel()
     {
-        clientToBeDeleted = null;
         deletePopUp.Hide();
     }
     void AddTheClient(Client client)
