@@ -1,0 +1,44 @@
+﻿@inject IRepositoryWrapper db
+
+<EditForm Model="newClient" OnValidSubmit="CreateNewClient" class="form-control">
+            <div class="card-header">
+                <h3>Create a new order</H3>
+            </div> 
+            <DataAnnotationsValidator />
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Name:</span>
+                    <InputText @bind-Value="newClient.Name" type="text" class="form-control" placeholder="Client name" />
+                    <button class="btn btn-outline-success">Add</button>
+                </div>
+                <ValidationMessage For="(() => newClient.Name)" />
+            </div>
+            @if (displaySuccessMessage)
+            {
+                <SuccessMessage />
+            }
+        </EditForm>
+
+
+@code {
+
+    [Parameter] public EventCallback<Client> AddTheClient { get; set; }
+
+    Client newClient = new();
+    bool displaySuccessMessage = false;
+
+    async Task CreateNewClient()
+    {
+        displaySuccessMessage = true;
+        Client client = new Client()
+            {
+                Name = newClient.Name,
+                DataCreate = DateTime.Now,
+                Status = 0
+            };
+        db.Client.CreateClient(client);
+        await db.SaveAsync();
+
+        await AddTheClient.InvokeAsync(client);
+    }
+}

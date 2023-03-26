@@ -1,65 +1,72 @@
 ﻿@inject IRepositoryWrapper db
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-    </symbol>
-</svg>
-
 @if (Order != null)
 {
-   <EditForm Model="Order" class="form-control">
-        <div class="input-group mb-3">
-            <span class="input-group-text">Id:</span>
-            <InputNumber @bind-Value="Order.Id" class="form-control" disabled />
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Decription:</span>
-            <InputText @bind-Value="Order.Decription" class="form-control" disabled="@isDisabledSaveButton"/>
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Date:</span>
-            <InputDate @bind-Value="Order.Date" class="form-control" disabled />
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Price:</span>
-            <InputNumber @bind-Value="Order.Price" class="form-control" disabled />
-        </div>
+    <div class="card">
+        <div class="card-body">
+            <EditForm Model="Order" OnValidSubmit="EditOrder">
+                <DataAnnotationsValidator />
                 <div class="input-group mb-3">
-            <span class="input-group-text">Client ID:</span>
-            <InputNumber @bind-Value="Order.ClientId" class="form-control" disabled />
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Currency ID:</span>
-            <InputNumber @bind-Value="Order.CurrencyId" class="form-control" disabled />
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Status:</span>
-            <InputSelect @bind-Value=@Order.Status class="form-control" disabled="@isDisabledSaveButton">
-                @foreach (var status in Enum.GetValues(typeof(OrderStatus)))
+                    <span class="input-group-text">Id:</span>
+                    <InputNumber @bind-Value="Order.Id" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Decription:</span>
+                    <InputText @bind-Value="Order.Decription" class="form-control" disabled="@isDisabledInputs" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Date:</span>
+                    <InputDate @bind-Value="Order.Date" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Price:</span>
+                    <InputNumber @bind-Value="Order.Price" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Client ID:</span>
+                    <InputNumber @bind-Value="Order.ClientId" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Currency ID:</span>
+                    <InputNumber @bind-Value="Order.CurrencyId" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Status:</span>
+                    <InputSelect @bind-Value=@Order.Status class="form-control" disabled="@isDisabledInputs">
+                        @foreach (var status in Enum.GetValues(typeof(OrderStatus)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                </div>
+                @if (isEditMode)
                 {
-                    <option value="@status">@status</option>
+                    <div class="mb-3">
+                        <button class="btn btn-success">Save</button>
+                    </div>
                 }
-            </InputSelect>
-        </div>
-        <div class="input-group mb-3">
-            <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditOrder())" disabled="@isDisabledEditButton">Edit</button>
-            <button type="submit" class="btn btn-primary" @onclick="@(() => EditOrder())" disabled="@isDisabledSaveButton">Save</button>
+                <ValidationMessage For="(() => Order.Decription)" />
+            </EditForm>
 
-            
+            @if (!isEditMode)
+            {
+                <div class="mb-3">
+                    <button class="btn btn-primary" @onclick="@(() => StartEditOrder())">Edit</button>
+                </div>
+            }
+            @if (displaySuccessMessage)
+            {
+                <SuccessMessage/>
+            }
         </div>
-        @if (displaySuccessMessage)
-        {
-            <SuccessMessage />
-        }
-    </EditForm>
+    </div>
 }
+
 @code {
     [Parameter] public Order Order { get; set; }
 
-    bool isDisabledSaveButton = true;
-    bool isDisabledEditButton = false;
-    string messageSuccessMessage = "Success";
+    bool isEditMode = false;
+    bool isDisabledInputs = true;
     bool displaySuccessMessage = false;
 
     void StartEditOrder()
@@ -78,7 +85,7 @@
     }
     void ChangeEditAndSaveButtonsState()
     {
-        isDisabledSaveButton = !isDisabledSaveButton;
-        isDisabledEditButton = !isDisabledEditButton;
+        isEditMode = !isEditMode;
+        isDisabledInputs = !isDisabledInputs;
     }
 }

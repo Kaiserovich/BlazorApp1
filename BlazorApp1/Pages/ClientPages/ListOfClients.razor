@@ -31,24 +31,7 @@
     </div>
 
     <div class="col-4">
-        <EditForm Model="newClient" OnValidSubmit="CreateNewClient" class="form-control">
-            <div class="card-header">
-                <h3>Create a new order</H3>
-            </div> 
-            <DataAnnotationsValidator />
-            <div class="card-body">
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Name:</span>
-                    <InputText @bind-Value="newClient.Name" type="text" class="form-control" placeholder="Client name" />
-                    <button class="btn btn-outline-success">Add</button>
-                </div>
-                <ValidationMessage For="(() => newClient.Name)" />
-            </div>
-            @if (displaySuccessMessage)
-            {
-                <SuccessMessage />
-            }
-        </EditForm>
+        <AddClient AddTheClient="AddTheClient"/>
     </div>
 </div>
 
@@ -60,8 +43,7 @@
     List<Client> clients;
     PopUp deletePopUp;
     Client clientToBeDeleted;
-    Client newClient = new();
-    bool displaySuccessMessage = false;
+ 
     protected async override Task OnInitializedAsync()
     {
         clients = await db.Client.GetAllClientsAsync();
@@ -88,17 +70,9 @@
         clientToBeDeleted = null;
         deletePopUp.Hide();
     }
-    async Task CreateNewClient()
+    void AddTheClient(Client client)
     {
-        displaySuccessMessage = true;
-        Client client = new Client()
-            {
-                Name = newClient.Name,
-                DataCreate = DateTime.Now,
-                Status = 0
-            };
-        db.Client.CreateClient(client);
-        await db.SaveAsync();
-        clients.Add(client);
+        if (client != null)
+            clients.Add(client);
     }
 }

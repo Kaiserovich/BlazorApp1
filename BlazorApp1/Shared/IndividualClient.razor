@@ -2,43 +2,59 @@
 
 @if (Client != null)
 {
-    <EditForm Model="Client" class="form-control">
-        <div class="input-group mb-3">
-            <span class="input-group-text">Id:</span>
-            <InputNumber @bind-Value="Client.Id" class="form-control" disabled />
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Name:</span>
-            <InputText @bind-Value="Client.Name" class="form-control" disabled="@isDisabledSaveButton"/>
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Create Data:</span>
-            <InputDate @bind-Value="Client.DataCreate" class="form-control" disabled/>
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text">Status:</span>
-            <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledSaveButton">
-                @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
+    <div class="card">
+        <div class="card-body">
+            <EditForm Model="Client" OnValidSubmit="EditClient">
+                <DataAnnotationsValidator />
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Id:</span>
+                    <InputNumber @bind-Value="Client.Id" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Name:</span>
+                    <InputText @bind-Value="Client.Name" class="form-control" disabled="@isDisabledInputs" />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Create Data:</span>
+                    <InputDate @bind-Value="Client.DataCreate" class="form-control" disabled />
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Status:</span>
+                    <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledInputs">
+                        @foreach (var status in Enum.GetValues(typeof(ClientStatus)))
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                </div>
+                @if (isEditMode)
                 {
-                    <option value="@status">@status</option>
+                    <div class="mb-3">
+                        <button class="btn btn-success">Save</button>
+                    </div>
                 }
-            </InputSelect>
+                <ValidationMessage For="(() => Client.Name)" />
+            </EditForm>
+            @if (!isEditMode)
+            {
+                <div class="mb-3">
+                    <button class="btn btn-primary" @onclick="@(() => StartEditClient())">Edit</button>
+                </div>
+            }
+            @if (displaySuccessMessage)
+            {
+                <SuccessMessage />
+            }
         </div>
-        <div class="input-group mb-3">
-            <button type="submit" class="btn btn-secondary" @onclick="@(() => StartEditClient())" disabled="@isDisabledEditButton">Edit</button>
-            <button type="submit" class="btn btn-primary" @onclick="@(() => EditClient())" disabled="@isDisabledSaveButton">Save</button>
-        </div>
-        @if (displaySuccessMessage)
-        {
-            <SuccessMessage />
-        }
-    </EditForm>
+    </div>
+
+
 }
 @code {
     [Parameter] public Client Client { get; set; }
 
-    bool isDisabledSaveButton = true;
-    bool isDisabledEditButton = false;
+    bool isDisabledInputs = true;
+    bool isEditMode = false;
     bool displaySuccessMessage = false;
 
     void StartEditClient()
@@ -48,16 +64,15 @@
     }
     async void EditClient()
     {
+        db.Client.Update(Client);
         ChangeEditAndSaveButtonsState();
         displaySuccessMessage = true;
-
-        db.Client.Update(Client);
         await db.SaveAsync();
     }
     void ChangeEditAndSaveButtonsState()
     {
-        isDisabledSaveButton = !isDisabledSaveButton;
-        isDisabledEditButton = !isDisabledEditButton;
+        isDisabledInputs = !isDisabledInputs;
+        isEditMode = !isEditMode;
     }
 
 }
