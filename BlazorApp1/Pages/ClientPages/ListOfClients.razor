@@ -22,8 +22,15 @@
                             <RowClient Client="client" DeleteTheClient="DeleteTheClient" />
                         </ItemTemplate>
                     </GenericList>
-                    <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirmAsync" OnCancel="OnDeleteCancel">
-                        <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id Name:@clientToBeDeleted.Name ?</div>
+                    <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirmAsync" OnCancel="OnDeleteCancel" isVisibleConfirmButton="!clientToBeDeletedHasOrders">
+                        @if (clientToBeDeletedHasOrders)
+                        {
+                            <div class="text-danger">Client: ID:@clientToBeDeleted.Id cannot be deleted, because deleting a client is available only if there are no orders</div>
+                        }
+                        else
+                        {
+                            <div class="text-danger">Do you wish to delete client: ID:@clientToBeDeleted.Id ?</div>
+                        }
                     </PopUp>
                 </tbody>
             </table>
@@ -43,7 +50,8 @@
     List<Client> clients;
     PopUp deletePopUp;
     Client clientToBeDeleted;
- 
+    bool clientToBeDeletedHasOrders = false;
+
     protected async override Task OnInitializedAsync()
     {
         clients = await db.Client.GetAllClientsAsync();
@@ -52,6 +60,15 @@
     {
         if (client != null)
         {
+            if (db.Order.GetOrdersByClientId(client.Id).Count() == 0)
+            {
+                clientToBeDeletedHasOrders = false;
+            }
+
+            else
+            {
+                clientToBeDeletedHasOrders = true;
+            }
             clientToBeDeleted = client;
             deletePopUp.Show();
         }

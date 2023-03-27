@@ -13,7 +13,10 @@
                     @ChildContent
                 </div>
                 <div class="modal-footer">
-                    <button @onclick="OnConfirm" type="button" class="btn btn-danger">@NameAction</button>
+                    @if (isVisibleConfirmButton)
+                    {
+                        <button @onclick="OnConfirm" type="button" class="btn btn-danger">@NameAction</button>
+                    }
                     <button @onclick="OnCancel" type="button" class="btn btn-primary">Cancel</button>
                 </div>
             </div>
@@ -29,6 +32,7 @@
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public bool isVisibleConfirmButton { get; set; } = true;
 
     public void Show() => display = true;
     public void Hide() => display = false;
