@@ -4,7 +4,7 @@
 {
     <div class="card">
         <div class="card-body">
-            <EditForm Model="Client" OnValidSubmit="EditClient">
+            <EditForm Model="Client" OnValidSubmit="EditTheClient">
                 <DataAnnotationsValidator />
                 <div class="input-group mb-3">
                     <span class="input-group-text">Id:</span>
@@ -64,7 +64,7 @@
         displaySuccessMessage = false;
         ChangeEditAndSaveButtonsState();
     }
-    void EditClient()
+    void EditTheClient()
     {
         if (Client.Status == ClientStatus.Inactive && db.Order.GetOrdersByClientId(Client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
         {
