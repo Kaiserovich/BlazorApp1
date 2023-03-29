@@ -3,7 +3,7 @@
 
 @if (client is not null)
 {
-    <PageTitle>@client.Name</PageTitle>
+    <PageTitle>Client @client.Name</PageTitle>
     <h3>
         Client page
     </h3>
@@ -29,7 +29,7 @@
                     <tbody>
                         <GenericList ListOfItems="ordersByClient">
                             <ItemTemplate Context="order">
-                                <RowOrder Order="order" IsVisibleClientId="false" />
+                                <RowOrder Order="order" IsVisibleClientId="false" IsWithButtons=false />
                             </ItemTemplate>
                         </GenericList>
                     </tbody>

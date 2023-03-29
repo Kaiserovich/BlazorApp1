@@ -1,5 +1,6 @@
 ﻿@page "/clients"
-@inject IRepositoryWrapper db
+@inject IClientService dbClient
+@inject IOrderService dbOrder
 
 <PageTitle>List of clients</PageTitle>
 
@@ -73,7 +74,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        clients = await db.Client.GetAllClientsAsync();
+        clients = await dbClient.GetAllClientsAsync();
     }
     public bool IsVisible(Client client)
     {
@@ -89,7 +90,7 @@
     {
         if (client != null)
         {
-            if (db.Order.GetOrdersByClientId(client.Id).Count() == 0)
+            if (dbOrder.GetOrdersByClientId(client.Id).Count() == 0)
             {
                 clientToBeDeletedHasOrders = false;
             }
@@ -107,8 +108,7 @@
         clients.Remove(clientToBeDeleted);
         deletePopUp.Hide();
 
-        db.Client.DeleteClient(clientToBeDeleted);
-        await db.SaveAsync();
+        dbClient.DeleteClient(clientToBeDeleted);
     }
     void OnDeleteCancel()
     {

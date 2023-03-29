@@ -1,19 +1,19 @@
-﻿@inject IRepositoryWrapper db
-
-@if (Client != null)
+﻿@if (Client != null)
 {
     <tr>
         <td>@Client.Id</td>
         <td>@Client.Name</td>
         <td>@Client.DataCreate</td>
         <td>@Client.Status</td>
-        @if (IsWithButtons)
-        {
-            <td>
-                <a class="btn btn-success" href="@url">Open</a>
+
+        <td>
+            <a class="btn btn-success" href="@url">Open</a>
+            @if (IsWithButtons)
+            {
                 <button class="btn btn-danger" @onclick="(() => DeleteTheClient.InvokeAsync(Client))">Delete</button>
-            </td>
-        }
+            }
+
+        </td>
     </tr>
 }
 @code {

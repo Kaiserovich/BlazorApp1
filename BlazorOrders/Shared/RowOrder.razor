@@ -1,24 +1,25 @@
 ﻿@if (Order != null)
 {
-        <tr>
-            <td>@Order.Id</td>
-            @if (IsVisibleClientId)
-            {
-                <td>@Order.ClientId</td>
-            }
-            <td>@Order.Decription</td>
-            <td>@Order.Date</td>
-            <td>@Order.Price</td>
-            <td>@Order.Status</td>
-            <td>@Order.CurrencyId</td>
+    <tr>
+        <td>@Order.Id</td>
+        @if (IsVisibleClientId)
+        {
+            <td>@Order.ClientId</td>
+        }
+        <td>@Order.Decription</td>
+        <td>@Order.Date</td>
+        <td>@Order.Price</td>
+        <td>@Order.Status</td>
+        <td>@Order.CurrencyId</td>
+
+        <td>
+            <a class="btn btn-success" href="@url">Open</a>
             @if (IsWithButtons)
             {
-                <td>
-                    <a class="btn btn-success" href="@url">Open</a>
-                    <button class="btn btn-danger" @onclick="(() => DeleteTheOrder.InvokeAsync(Order))">Delete</button>
-                </td>
+                <button class="btn btn-danger" @onclick="(() => DeleteTheOrder.InvokeAsync(Order))">Delete</button>
             }
-        </tr>
+        </td>
+    </tr>
 }
 @code {
     [Parameter] public Order Order { get; set; }

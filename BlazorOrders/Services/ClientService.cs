@@ -36,6 +36,7 @@ namespace BlazorOrders.Services
         public void DeleteClient(Client client)
         {
             repoWrapper.Client.Delete(client);
+            repoWrapper.SaveAsync();
         }
     }
 }

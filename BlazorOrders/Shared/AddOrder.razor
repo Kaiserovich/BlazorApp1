@@ -1,5 +1,4 @@
-﻿@inject IRepositoryWrapper db
-@inject IOrderService dbService
+﻿@inject IOrderService dbOrder
 
 <div class="card">
     <div class="card-header">
@@ -55,12 +54,11 @@
 
     async Task CreateNewOrderAsync()
     {
-        message = await dbService.CreateOrderAsync(newOrder);
+        message = await dbOrder.CreateOrderAsync(newOrder);
         if(message == string.Empty)
         {
-        await AddTheOrder.InvokeAsync(newOrder);
-        newOrder = new();
+            await AddTheOrder.InvokeAsync(newOrder);
+            newOrder = new();
         }
-
     }
 }

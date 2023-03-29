@@ -1,5 +1,5 @@
 ﻿@page "/orders"
-@inject IRepositoryWrapper db
+@inject IOrderService dbOrder
 
 <PageTitle>List of orders</PageTitle>
 
@@ -64,7 +64,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        orders = await db.Order.GetAllOrdersAsync();
+        orders = await dbOrder.GetAllOrdersAsync();
     }
     public bool IsVisible(Order order)
     {
@@ -98,9 +98,7 @@
         orders.Remove(orderToBeDeleted);
         OnDeleteCancel();
 
-        db.Order.DeleteOrder(orderToBeDeleted);
-        await db.SaveAsync();
-
+        dbOrder.DeleteOrder(orderToBeDeleted);
     }
     void OnDeleteCancel()
     {

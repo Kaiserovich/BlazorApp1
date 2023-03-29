@@ -19,14 +19,9 @@ namespace BlazorOrders.Services
         {
             Client assosiateClient = await repoWrapper.Client.GetClientByIdAsync(order.ClientId);
             if (assosiateClient is null)
-            {
                 return $"The client(ID:{order.ClientId}) does not exist";
-
-            }
             else if (assosiateClient.Status != ClientStatus.Active)
-            {
                 return $"The client(ID:{order.ClientId}) does not have an active status";
-            }
             else
             {
                 order.Status = 0;
@@ -38,7 +33,17 @@ namespace BlazorOrders.Services
                 return string.Empty;
             }
         }
-        public void UpadateOrder(Order order) => repoWrapper.Order.Update(order);
-        public void DeleteOrder(Order order) => repoWrapper.Order.Delete(order);
+        public string UpadateOrder(Order order)
+        {
+            repoWrapper.Order.Update(order);
+            repoWrapper.SaveAsync();
+
+            return string.Empty;
+        }
+        public void DeleteOrder(Order order)
+        {
+            repoWrapper.Order.Delete(order);
+            repoWrapper.SaveAsync();
+        }
     }
 }

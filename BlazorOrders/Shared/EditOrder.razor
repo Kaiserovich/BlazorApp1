@@ -1,4 +1,4 @@
-﻿@inject IRepositoryWrapper db
+﻿@inject IOrderService dbOrder
 
 @if (Order != null)
 {
@@ -79,8 +79,7 @@
         ChangeEditAndSaveButtonsState();
         displaySuccessMessage = true;
 
-        db.Order.Update(Order);
-        await db.SaveAsync();
+        dbOrder.UpadateOrder(Order);
 
     }
     void ChangeEditAndSaveButtonsState()
