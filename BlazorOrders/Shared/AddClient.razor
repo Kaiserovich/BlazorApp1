@@ -3,7 +3,7 @@
 <EditForm Model="newClient" OnValidSubmit="CreateNewClientAsync">
     <div class="card">
         <div class="card-header">
-            <h3>Create a new order</H3>
+            <h3>Create a new client</H3>
         </div> 
 
         <DataAnnotationsValidator />
@@ -34,7 +34,8 @@
 
     async Task CreateNewClientAsync()
     {
-        newClient = await dbClient.CreateClientAsync(newClient);
+        await dbClient.CreateClientAsync(newClient);
         await AddTheClient.InvokeAsync(newClient);
+        newClient = new();
     }
 }

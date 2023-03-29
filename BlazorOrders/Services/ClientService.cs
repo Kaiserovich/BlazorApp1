@@ -11,7 +11,7 @@ namespace BlazorOrders.Services
         public ClientService(IRepositoryWrapper repoWrapper) => this.repoWrapper = repoWrapper;
         public async Task<List<Client>> GetAllClientsAsync() => await repoWrapper.Client.FindAll().ToListAsync();
         public async Task<Client> GetClientByIdAsync(int id) => await repoWrapper.Client.FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
-        public async Task<Client> CreateClientAsync(Client client)
+        public async Task<string> CreateClientAsync(Client client)
         {
             client.DataCreate = DateTime.Now;
             client.Status = 0;
@@ -19,7 +19,7 @@ namespace BlazorOrders.Services
             repoWrapper.Client.CreateClient(client);
             await repoWrapper.SaveAsync();
 
-            return client;
+            return string.Empty;
         }
         public string UpadateClient(Client client)
         {

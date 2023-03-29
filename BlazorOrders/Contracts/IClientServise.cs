@@ -6,7 +6,7 @@ namespace BlazorOrders.Contracts
     {
         Task<List<Client>> GetAllClientsAsync();
         Task<Client> GetClientByIdAsync(int id);
-        Task<Client> CreateClientAsync(Client client);
+        Task<string> CreateClientAsync(Client client);
         string UpadateClient(Client client);
         void DeleteClient(Client client);
     }

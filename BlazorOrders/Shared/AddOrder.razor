@@ -56,9 +56,11 @@
     async Task CreateNewOrderAsync()
     {
         message = await dbService.CreateOrderAsync(newOrder);
-
-        await AddTheOrder.InvokeAsync( await dbService.GetLastOrdersAsync());
-
+        if(message == string.Empty)
+        {
+        await AddTheOrder.InvokeAsync(newOrder);
+        newOrder = new();
         }
+
     }
 }
