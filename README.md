@@ -1,4 +1,10 @@
-# BlazorApp1
+# BlazorOrders
+
+![image](https://user-images.githubusercontent.com/31707173/228570510-488d690c-05ed-407e-be30-d51d19ebd621.png)
+![image](https://user-images.githubusercontent.com/31707173/228570674-f582b38d-be79-4563-9b08-98a927964da9.png)
+![image](https://user-images.githubusercontent.com/31707173/228570712-f176ee30-d9f1-43f4-a0bb-1ee4694304d7.png)
+![image](https://user-images.githubusercontent.com/31707173/228570789-b5228005-4d86-4834-9ffb-ba5bad314063.png)
+
 
 Модель данных
 
