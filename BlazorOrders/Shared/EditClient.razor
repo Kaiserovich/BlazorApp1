@@ -1,4 +1,4 @@
-﻿@inject IRepositoryWrapper db
+﻿@inject IClientService dbClient
 
 @if (Client != null)
 {
@@ -66,19 +66,12 @@
     }
     void EditTheClient()
     {
-        if (Client.Status == ClientStatus.Inactive && db.Order.GetOrdersByClientId(Client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
+        message = dbClient.UpadateClient(Client);
+
+        if(message == string.Empty)
         {
-            message = $"The client has orders in a new status. So the client's status be changed";
-        }
-        else
-        {
-            message = string.Empty;
             ChangeEditAndSaveButtonsState();
             displaySuccessMessage = true;
-
-
-            db.Client.Update(Client);
-            db.SaveAsync();
         }
     }
     void ChangeEditAndSaveButtonsState()

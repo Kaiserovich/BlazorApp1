@@ -1,4 +1,4 @@
-﻿@inject IRepositoryWrapper db
+﻿@inject IClientService dbClient
 
 <EditForm Model="newClient" OnValidSubmit="CreateNewClientAsync">
     <div class="card">
@@ -34,16 +34,7 @@
 
     async Task CreateNewClientAsync()
     {
-        displaySuccessMessage = true;
-        Client client = new Client()
-            {
-                Name = newClient.Name,
-                DataCreate = DateTime.Now,
-                Status = 0
-            };
-        db.Client.CreateClient(client);
-        await db.SaveAsync();
-
-        await AddTheClient.InvokeAsync(client);
+        newClient = await dbClient.CreateClientAsync(newClient);
+        await AddTheClient.InvokeAsync(newClient);
     }
 }

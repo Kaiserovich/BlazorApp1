@@ -1,9 +1,5 @@
-﻿using BlazorOrders;
-using BlazorOrders.Contracts;
+﻿using BlazorOrders.Contracts;
 using BlazorOrders.Entities;
-using BlazorOrders.Entities.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace BlazorOrders.Repository
 {
@@ -17,9 +13,7 @@ namespace BlazorOrders.Repository
             get
             {
                 if (_client == null)
-                {
                     _client = new ClientRepository(_repoContext);
-                }
                 return _client;
             }
         }
@@ -28,19 +22,11 @@ namespace BlazorOrders.Repository
             get
             {
                 if (_order == null)
-                {
                     _order = new OrderRepository(_repoContext);
-                }
                 return _order;
             }
         }
-        public RepositoryWrapper(AppDbContext repositoryContext)
-        {
-            _repoContext = repositoryContext;
-        }
-        public async Task SaveAsync()
-        {
-            await _repoContext.SaveChangesAsync();
-        }
+        public RepositoryWrapper(AppDbContext repositoryContext) => _repoContext = repositoryContext;
+        public async Task SaveAsync() => await _repoContext.SaveChangesAsync();
     }
 }

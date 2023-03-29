@@ -1,4 +1,5 @@
 ﻿@inject IRepositoryWrapper db
+@inject IOrderService dbService
 
 <div class="card">
     <div class="card-header">
@@ -54,35 +55,9 @@
 
     async Task CreateNewOrderAsync()
     {
-        Client assosiateClient = await db.Client.GetClientByIdAsync(newOrder.ClientId);
-        if (assosiateClient is null)
-        {
-            message = $"The client(ID:{newOrder.ClientId}) does not exist";
+        message = await dbService.CreateOrderAsync(newOrder);
 
-        }
-        else if (assosiateClient.Status != ClientStatus.Active)
-        {
-            message = $"The client(ID:{newOrder.ClientId}) does not have an active status";
-        }
-        else
-        {
-            displaySuccessMessage = true;
-            message = string.Empty;
-            Order order = new Order()
-                {
-                    Decription = newOrder.Decription,
-                    Date = DateTime.Now,
-                    Price = newOrder.Price,
-                    Status = 0,
-                    CurrencyId = newOrder.CurrencyId,
-                    ClientId = newOrder.ClientId
-
-                };
-
-            db.Order.CreateOrder(order);
-            await db.SaveAsync();
-
-            await AddTheOrder.InvokeAsync(order);
+        await AddTheOrder.InvokeAsync( await dbService.GetLastOrdersAsync());
 
         }
     }
