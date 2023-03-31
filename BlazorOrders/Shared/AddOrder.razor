@@ -58,6 +58,8 @@
         if(message == string.Empty)
         {
             await AddTheOrder.InvokeAsync(newOrder);
+
+            displaySuccessMessage = true;
             newOrder = new();
         }
     }

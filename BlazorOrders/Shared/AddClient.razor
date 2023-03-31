@@ -36,6 +36,8 @@
     {
         await dbClient.CreateClientAsync(newClient);
         await AddTheClient.InvokeAsync(newClient);
+
+        displaySuccessMessage = true;
         newClient = new();
     }
 }
