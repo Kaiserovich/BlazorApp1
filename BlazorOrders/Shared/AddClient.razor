@@ -26,10 +26,10 @@
 
 
 @code {
-
     [Parameter] public EventCallback<Client> AddTheClient { get; set; }
 
     Client newClient = new();
+
     bool displaySuccessMessage = false;
 
     async Task CreateNewClientAsync()

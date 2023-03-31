@@ -48,15 +48,15 @@
             }
         </div>
     </div>
-
-
 }
 @code {
     [Parameter] public Client Client { get; set; }
 
     bool isDisabledInputs = true;
     bool isEditMode = false;
+
     bool displaySuccessMessage = false;
+
     string message;
 
     void StartEditClient()

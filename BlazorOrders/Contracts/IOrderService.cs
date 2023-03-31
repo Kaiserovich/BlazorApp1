@@ -8,8 +8,8 @@ namespace BlazorOrders.Contracts
         List<Order> GetOrdersByClientId(int clientId);
         Task<Order> GetLastOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
-        Task<string> CreateOrderAsync(Order order);
-        string UpadateOrder(Order order);
+        Task CreateOrderAsync(Order order);
+        void UpadateOrder(Order order);
         void DeleteOrder(Order order);
     }
 }

@@ -10,16 +10,15 @@ namespace BlazorOrders.Services
         private readonly IRepositoryWrapper repoWrapper;
         public ClientService(IRepositoryWrapper repoWrapper) => this.repoWrapper = repoWrapper;
         public async Task<List<Client>> GetAllClientsAsync() => await repoWrapper.Client.FindAll().ToListAsync();
+        public async Task<List<Client>> GetClientsByStatusAsync(ClientStatus status) => await repoWrapper.Client.FindAll().Where(x => x.Status == status).ToListAsync();
         public async Task<Client> GetClientByIdAsync(int id) => await repoWrapper.Client.FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
-        public async Task<string> CreateClientAsync(Client client)
+        public async Task CreateClientAsync(Client client)
         {
             client.DataCreate = DateTime.Now;
             client.Status = 0;
 
             repoWrapper.Client.CreateClient(client);
             await repoWrapper.SaveAsync();
-
-            return string.Empty;
         }
         public string UpadateClient(Client client)
         {

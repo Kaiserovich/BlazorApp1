@@ -49,11 +49,6 @@
             </table>
         </div>
     </div>
-
-    <div class="col col-4">
-        <AddOrder AddTheOrder="AddTheOrder" />
-
-    </div>
 </div>
 
 @code {
@@ -103,10 +98,5 @@
     void OnDeleteCancel()
     {
         deletePopUp.Hide();
-    }
-    void AddTheOrder(Order order)
-    {
-        if (order != null)
-            orders.Add(order);
     }
 }

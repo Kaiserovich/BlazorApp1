@@ -15,30 +15,18 @@ namespace BlazorOrders.Services
         public async Task<Order> GetOrderByIdAsync(int id) => await repoWrapper.Order.FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
         public async Task<Order> GetLastOrdersAsync() => await repoWrapper.Order.FindAll().LastOrDefaultAsync();
 
-        public async Task<string> CreateOrderAsync(Order order)
+        public async Task CreateOrderAsync(Order order)
         {
-            Client assosiateClient = await repoWrapper.Client.GetClientByIdAsync(order.ClientId);
-            if (assosiateClient is null)
-                return $"The client(ID:{order.ClientId}) does not exist";
-            else if (assosiateClient.Status != ClientStatus.Active)
-                return $"The client(ID:{order.ClientId}) does not have an active status";
-            else
-            {
-                order.Status = 0;
-                order.Date = DateTime.Now;
+            order.Status = 0;
+            order.Date = DateTime.Now;
 
-                repoWrapper.Order.Create(order);
-                await repoWrapper.SaveAsync();
-
-                return string.Empty;
-            }
+            repoWrapper.Order.Create(order);
+            await repoWrapper.SaveAsync();
         }
-        public string UpadateOrder(Order order)
+        public void UpadateOrder(Order order)
         {
             repoWrapper.Order.Update(order);
             repoWrapper.SaveAsync();
-
-            return string.Empty;
         }
         public void DeleteOrder(Order order)
         {

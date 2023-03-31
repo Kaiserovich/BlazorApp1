@@ -1,4 +1,7 @@
-﻿@inject IOrderService dbOrder
+﻿@page "/orders/add"
+
+@inject IOrderService dbOrder
+@inject IClientService dbClient
 
 <div class="card">
     <div class="card-header">
@@ -18,7 +21,19 @@
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Client ID:</span>
-                <InputNumber @bind-Value="newOrder.ClientId" type="text" class="form-control" />
+                @if (thereAreClientsInAnActiveStatus)
+                {
+                    <InputSelect @bind-Value=@newOrder.ClientId class="form-control" >
+                            @foreach (var clientByActiveStatus in clientsByActiveStatus)
+                            {
+                                <option value="@clientByActiveStatus.Id">@clientByActiveStatus.Name</option>
+                            }
+                    </InputSelect>
+                }
+                else
+                {
+                    <span class="input-group-text text-danger" disabled="true">There are no clients in an active status</span>
+                }
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Currency ID:</span>
@@ -30,11 +45,13 @@
                 <ValidationMessage For="(() => newOrder.ClientId)" />
                 <ValidationMessage For="(() => newOrder.CurrencyId)" />
             </div>
-            <div class="mb-3">
-                <button class="btn btn-outline-success">Add</button>
-                <span class="text-danger">@message</span>
-            </div>
-
+            @if (thereAreClientsInAnActiveStatus)
+            {
+                <div class="mb-3">
+                    <button class="btn btn-outline-success">Add</button>
+                    <span class="text-danger">@message</span>
+                </div>
+            }
             @if (displaySuccessMessage)
             {
                 <SuccessMessage />
@@ -45,22 +62,29 @@
 
 
 @code {
-
-    [Parameter] public EventCallback<Order> AddTheOrder { get; set; }
-
     Order newOrder = new();
+
+    List<Client> clientsByActiveStatus;
+    bool thereAreClientsInAnActiveStatus = false;
+
     bool displaySuccessMessage = false;
+
     string message;
 
+    protected async override Task OnInitializedAsync()
+    {
+        clientsByActiveStatus = await dbClient.GetClientsByStatusAsync(ClientStatus.Active);
+        if (clientsByActiveStatus.Count() != 0)
+        {
+            thereAreClientsInAnActiveStatus = true;
+            newOrder.ClientId = clientsByActiveStatus.First().Id;
+        }
+    }
     async Task CreateNewOrderAsync()
     {
-        message = await dbOrder.CreateOrderAsync(newOrder);
-        if(message == string.Empty)
-        {
-            await AddTheOrder.InvokeAsync(newOrder);
+        await dbOrder.CreateOrderAsync(newOrder);
 
-            displaySuccessMessage = true;
-            newOrder = new();
-        }
+        displaySuccessMessage = true;
+        newOrder = new();
     }
 }
