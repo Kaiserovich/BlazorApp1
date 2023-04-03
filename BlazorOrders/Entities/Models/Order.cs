@@ -18,7 +18,7 @@ namespace BlazorOrders.Entities.Models
         public OrderStatus Status { get; set; }
         [Required]
         [Display(Name= "Currency ID")]
-        public int CurrencyId { get; set; }
+        public CurrencyType Currency { get; set; }
 
         [Required]
         [Display(Name= "Client ID")]

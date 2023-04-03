@@ -37,13 +37,13 @@
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Currency ID:</span>
-                <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+                <InputNumber @bind-Value="newOrder.Currency" type="text" class="form-control" />
             </div>
             <div class="mb-3">
                 <ValidationMessage For="(() => newOrder.Decription)" />
                 <ValidationMessage For="(() => newOrder.Price)" />
                 <ValidationMessage For="(() => newOrder.ClientId)" />
-                <ValidationMessage For="(() => newOrder.CurrencyId)" />
+                <ValidationMessage For="(() => newOrder.Currency)" />
             </div>
             @if (thereAreClientsInAnActiveStatus)
             {
