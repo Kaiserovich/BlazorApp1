@@ -27,8 +27,13 @@
                     <InputNumber @bind-Value="Order.ClientId" class="form-control" disabled />
                 </div>
                 <div class="input-group mb-3">
-                    <span class="input-group-text">Currency ID:</span>
-                    <InputNumber @bind-Value="Order.CurrencyId" class="form-control" disabled />
+                    <span class="input-group-text">Currency:</span>
+                    <InputSelect @bind-Value=@Order.Currency class="form-control" disabled>
+                        @foreach (var сurrency in Enum.GetValues(typeof(CurrencyType)))
+                        {
+                            <option value="@сurrency">@сurrency</option>
+                        }
+                    </InputSelect>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">Status:</span>

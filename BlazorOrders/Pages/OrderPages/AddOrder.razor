@@ -36,14 +36,20 @@
                 }
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text">Currency ID:</span>
-                <InputNumber @bind-Value="newOrder.CurrencyId" type="text" class="form-control" />
+                <span class="input-group-text">Currency:</span>
+                <InputSelect @bind-Value=@newOrder.Currency class="form-control" >
+                    @foreach (var сurrency in Enum.GetValues(typeof(CurrencyType)))
+                    {
+                        <option value="@сurrency">@сurrency</option>
+                    }
+                    </InputSelect>
             </div>
             <div class="mb-3">
                 <ValidationMessage For="(() => newOrder.Decription)" />
                 <ValidationMessage For="(() => newOrder.Price)" />
                 <ValidationMessage For="(() => newOrder.ClientId)" />
-                <ValidationMessage For="(() => newOrder.CurrencyId)" />
+                <ValidationMessage For="(() => newOrder.Currency)" />
+                <ValidationMessage For="(() => newOrder.ClientId)" />
             </div>
             @if (thereAreClientsInAnActiveStatus)
             {
@@ -86,5 +92,6 @@
 
         displaySuccessMessage = true;
         newOrder = new();
+        newOrder.ClientId = clientsByActiveStatus.First().Id;
     }
 }
