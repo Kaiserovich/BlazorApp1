@@ -1,15 +1,17 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <NotFound/>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <NotFound />
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
 
 @*Модель данных
 • Clients (минимально содержит поля ID, Name, DateCreate, Status) – клиенты, таблица содержит данные о клиентах, дате создания клиента, статусе клиента (потенциальный, активный, не активный)

@@ -3,7 +3,7 @@ using BlazorOrders.Entities.Enumerations;
 using BlazorOrders.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorOrders.Services
+namespace BlazorOrders.Infrastructure
 {
     public class ClientService : IClientService
     {

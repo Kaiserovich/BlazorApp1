@@ -1,11 +1,10 @@
 using BlazorOrders.Repository;
 using BlazorOrders;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using BlazorOrders.Entities;
 using BlazorOrders.Contracts;
-using BlazorOrders.Services;
+using BlazorOrders.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +13,9 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+//builder.Services.AddOptions();
+//builder.Services.AddAuthorizationCore();
 
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 builder.Services.AddScoped<IClientService, ClientService>();

@@ -1,9 +1,15 @@
 ﻿@page "/"
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Welcome</PageTitle>
 
 <h1>Welcome Page</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized.</p> <a href="/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>

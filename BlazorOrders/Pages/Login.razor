@@ -1,0 +1,27 @@
+﻿@page "/login"
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+
+<EditForm Model="LoginData">
+    <DataAnnotationsValidator />
+    <div class="input-group mb-3">
+        <span class="input-group-text">UserName:</span>
+        <InputText @bind-Value="LoginData.UserName" type="text" placeholder="Input text" class="form-control" />
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text">Password:</span>
+        <InputText @bind-Value="LoginData.Password" type="password" class="form-control" />
+    </div>
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    public LoginUser LoginData { get; set; } = new LoginUser();
+
+
+}
+

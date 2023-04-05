@@ -5,7 +5,10 @@
     <div class="card">
         <div class="card-body">
             <EditForm Model="Client" OnValidSubmit="EditTheClient">
+
                 <DataAnnotationsValidator />
+
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Id:</span>
                     <InputNumber @bind-Value="Client.Id" class="form-control" disabled />
@@ -33,7 +36,7 @@
                         <button class="btn btn-success">Save</button>
                     </div>
                 }
-                <ValidationMessage For="(() => Client.Name)" />
+                <ValidationSummary />
                 <span class="text-danger">@message</span>
             </EditForm>
             @if (!isEditMode)
@@ -68,7 +71,7 @@
     {
         message = dbClient.UpadateClient(Client);
 
-        if(message == string.Empty)
+        if (message == string.Empty)
         {
             ChangeEditAndSaveButtonsState();
             displaySuccessMessage = true;

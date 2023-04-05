@@ -45,11 +45,7 @@
                     </InputSelect>
             </div>
             <div class="mb-3">
-                <ValidationMessage For="(() => newOrder.Decription)" />
-                <ValidationMessage For="(() => newOrder.Price)" />
-                <ValidationMessage For="(() => newOrder.ClientId)" />
-                <ValidationMessage For="(() => newOrder.Currency)" />
-                <ValidationMessage For="(() => newOrder.ClientId)" />
+                <ValidationSummary/>
             </div>
             @if (thereAreClientsInAnActiveStatus)
             {

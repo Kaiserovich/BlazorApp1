@@ -4,7 +4,7 @@ using BlazorOrders.Entities.Models;
 using BlazorOrders.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorOrders.Services
+namespace BlazorOrders.Infrastructure
 {
     public class OrderService : IOrderService
     {

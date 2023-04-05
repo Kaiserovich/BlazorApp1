@@ -1,5 +1,6 @@
 ﻿using BlazorOrders.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BlazorOrders.Entities
 {
