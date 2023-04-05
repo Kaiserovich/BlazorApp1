@@ -1,7 +1,5 @@
 ﻿using BlazorOrders.Contracts;
-using BlazorOrders.Entities.Enumerations;
 using BlazorOrders.Entities.Models;
-using BlazorOrders.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorOrders.Infrastructure
