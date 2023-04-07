@@ -1,21 +1,22 @@
 ﻿@inject IClientService dbClient
 
 <EditForm Model="newClient" OnValidSubmit="CreateNewClientAsync">
+    <DataAnnotationsValidator />
+
     <div class="card">
         <div class="card-header">
             <h3>Create a new client</H3>
         </div> 
 
-        <DataAnnotationsValidator />
-        
-
         <div class="card-body">
             <div class="input-group mb-3">
                 <span class="input-group-text">Name:</span>
                 <InputText @bind-Value="newClient.Name" class="form-control" placeholder="Client name" />
+
                 <button class="btn btn-outline-success">Add</button>
             </div>
-            <ValidationSummary/>
+        <ValidationSummary/>
+
         @if (displaySuccessMessage)
         {
             <SuccessMessage />
@@ -23,8 +24,6 @@
         </div>
     </div>
 </EditForm>
-
-
 
 @code {
     [Parameter] public EventCallback<Client> AddTheClient { get; set; }

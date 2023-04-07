@@ -5,22 +5,23 @@
     <div class="card">
         <div class="card-body">
             <EditForm Model="Client" OnValidSubmit="EditTheClient">
-
                 <DataAnnotationsValidator />
-
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Id:</span>
                     <InputNumber @bind-Value="Client.Id" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Name:</span>
                     <InputText @bind-Value="Client.Name" class="form-control" disabled="@isDisabledInputs" />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Create Data:</span>
                     <InputDate @bind-Value="Client.DataCreate" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Status:</span>
                     <InputSelect @bind-Value=@Client.Status class="form-control" disabled="@isDisabledInputs">
@@ -30,21 +31,27 @@
                         }
                     </InputSelect>
                 </div>
+
                 @if (isEditMode)
                 {
                     <div class="mb-3">
                         <button class="btn btn-success">Save</button>
                     </div>
                 }
+
                 <ValidationSummary />
                 <span class="text-danger">@message</span>
             </EditForm>
-            @if (!isEditMode)
-            {
-                <div class="mb-3">
-                    <button class="btn btn-primary" @onclick="@(() => StartEditClient())">Edit</button>
-                </div>
-            }
+
+            <AuthorizeView>
+                @if (!isEditMode)
+                {
+                    <div class="mb-3">
+                        <button class="btn btn-primary" @onclick="@(() => StartEditClient())">Edit</button>
+                    </div>
+                }
+            </AuthorizeView>
+
             @if (displaySuccessMessage)
             {
                 <SuccessMessage />

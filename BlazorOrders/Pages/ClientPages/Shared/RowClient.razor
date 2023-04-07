@@ -10,7 +10,9 @@
             <a class="btn btn-success" href="@url">Open</a>
             @if (IsWithButtons)
             {
-                <button class="btn btn-danger" @onclick="(() => DeleteTheClient.InvokeAsync(Client))">Delete</button>
+                <AuthorizeView>
+                    <button class="btn btn-danger" @onclick="(() => DeleteTheClient.InvokeAsync(Client))">Delete</button>
+                </AuthorizeView>
             }
 
         </td>

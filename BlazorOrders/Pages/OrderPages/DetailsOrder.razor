@@ -17,6 +17,7 @@
             <h4>Client of the selected order</h4>
             <div class="table-responsive">
                 <table class="table table-striped">
+
                     <thead>
                         <tr>
                             <th>Client ID</th>
@@ -25,9 +26,11 @@
                             <th>Status</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <RowClient Client="associatedClient" IsWithButtons=false />
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -49,7 +52,5 @@ else
         order =  await db.Order.GetOrderByIdAsync(OrderId);
         if (order is not null)
             associatedClient = await db.Client.GetClientByIdAsync(order.ClientId);
-
     }
-
 }

@@ -2,30 +2,35 @@
 
 @if (Order != null)
 {
-    <div class="card">
-        <div class="card-body">
+    <div class="card card-body">
             <EditForm Model="Order" OnValidSubmit="EditTheOrder">
                 <DataAnnotationsValidator />
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Id:</span>
                     <InputNumber @bind-Value="Order.Id" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Decription:</span>
                     <InputText @bind-Value="Order.Decription" class="form-control" disabled="@isDisabledInputs" />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Date:</span>
                     <InputDate @bind-Value="Order.Date" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Price:</span>
                     <InputNumber @bind-Value="Order.Price" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Client ID:</span>
                     <InputNumber @bind-Value="Order.ClientId" class="form-control" disabled />
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Currency:</span>
                     <InputSelect @bind-Value=@Order.Currency class="form-control" disabled>
@@ -35,6 +40,7 @@
                         }
                     </InputSelect>
                 </div>
+
                 <div class="input-group mb-3">
                     <span class="input-group-text">Status:</span>
                     <InputSelect @bind-Value=@Order.Status class="form-control" disabled="@isDisabledInputs">
@@ -44,6 +50,7 @@
                         }
                     </InputSelect>
                 </div>
+
                 @if (isEditMode)
                 {
                     <div class="mb-3">
@@ -53,18 +60,20 @@
                 <ValidationSummary />
             </EditForm>
 
+            <AuthorizeView>
             @if (!isEditMode)
             {
                 <div class="mb-3">
                     <button class="btn btn-primary" @onclick="@(() => StartEditOrder())">Edit</button>
                 </div>
             }
+            </AuthorizeView>
+
             @if (displaySuccessMessage)
             {
                 <SuccessMessage/>
             }
         </div>
-    </div>
 }
 
 @code {

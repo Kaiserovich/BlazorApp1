@@ -1,4 +1,5 @@
 ﻿@page "/orders/add"
+@attribute [Authorize]
 
 @inject IOrderService dbOrder
 @inject IClientService dbClient
@@ -8,58 +9,59 @@
         <h3>Create a new order</H3>
     </div> 
 
-    <div class="card-body">
-        <EditForm Model="newOrder" OnValidSubmit="CreateNewOrderAsync" >
-            <DataAnnotationsValidator />
-            <div class="input-group mb-3">
-                <span class="input-group-text">Decription:</span>
-                <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text" class="form-control" />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Price:</span>
-                <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Client ID:</span>
-                @if (thereAreClientsInAnActiveStatus)
-                {
-                    <InputSelect @bind-Value=@newOrder.ClientId class="form-control" >
-                            @foreach (var clientByActiveStatus in clientsByActiveStatus)
-                            {
-                                <option value="@clientByActiveStatus.Id">@clientByActiveStatus.Name</option>
-                            }
-                    </InputSelect>
-                }
-                else
-                {
-                    <span class="input-group-text text-danger" disabled="true">There are no clients in an active status</span>
-                }
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Currency:</span>
-                <InputSelect @bind-Value=@newOrder.Currency class="form-control" >
-                    @foreach (var сurrency in Enum.GetValues(typeof(CurrencyType)))
-                    {
-                        <option value="@сurrency">@сurrency</option>
-                    }
-                    </InputSelect>
-            </div>
-            <div class="mb-3">
-                <ValidationSummary/>
-            </div>
+    <EditForm Model="newOrder" OnValidSubmit="CreateNewOrderAsync" class="card-body">
+        <DataAnnotationsValidator />
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">Decription:</span>
+            <InputText @bind-Value="newOrder.Decription" type="text" placeholder="Input text" class="form-control" />
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">Price:</span>
+            <InputNumber @bind-Value="newOrder.Price" type="text" class="form-control" />
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">Client ID:</span>
             @if (thereAreClientsInAnActiveStatus)
             {
-                <div class="mb-3">
-                    <button class="btn btn-outline-success">Add</button>
-                    <span class="text-danger">@message</span>
-                </div>
+                <InputSelect @bind-Value=@newOrder.ClientId class="form-control" >
+                        @foreach (var clientByActiveStatus in clientsByActiveStatus)
+                        {
+                            <option value="@clientByActiveStatus.Id">@clientByActiveStatus.Name</option>
+                        }
+                </InputSelect>
             }
-            @if (displaySuccessMessage)
+            else
             {
-                <SuccessMessage />
+                <span class="input-group-text text-danger" disabled="true">There are no clients in an active status</span>
             }
-        </EditForm>
-    </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <span class="input-group-text">Currency:</span>
+            <InputSelect @bind-Value=@newOrder.Currency class="form-control" >
+                @foreach (var сurrency in Enum.GetValues(typeof(CurrencyType)))
+                {
+                    <option value="@сurrency">@сurrency</option>
+                }
+            </InputSelect>
+        </div>
+        
+        @if (thereAreClientsInAnActiveStatus)
+        {
+            <div class="mb-3">
+                <button class="btn btn-outline-success">Add</button>
+            </div>
+        }
+
+        <ValidationSummary/>
+        @if (displaySuccessMessage)
+        {
+            <SuccessMessage />
+        }
+    </EditForm>
 </div>
 
 
@@ -70,8 +72,6 @@
     bool thereAreClientsInAnActiveStatus = false;
 
     bool displaySuccessMessage = false;
-
-    string message;
 
     protected async override Task OnInitializedAsync()
     {
