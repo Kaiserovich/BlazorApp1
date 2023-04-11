@@ -31,11 +31,21 @@ Client part implements CRUD logic for the entities customers and orders, validat
 
 Удаление клиента доступно только при отсутствии заказов.
 
-![image](https://user-images.githubusercontent.com/31707173/228570510-488d690c-05ed-407e-be30-d51d19ebd621.png)
-![image](https://user-images.githubusercontent.com/31707173/228570674-f582b38d-be79-4563-9b08-98a927964da9.png)
-![image](https://user-images.githubusercontent.com/31707173/228570712-f176ee30-d9f1-43f4-a0bb-1ee4694304d7.png)
-![image](https://user-images.githubusercontent.com/31707173/228570789-b5228005-4d86-4834-9ffb-ba5bad314063.png)
-![image](https://user-images.githubusercontent.com/31707173/228571652-d34e53b9-0920-47b4-b645-45c120b5f42f.png)
-![image](https://user-images.githubusercontent.com/31707173/228571742-16c2b944-3142-4f0a-bc2e-e0db0f9c4aaf.png)
-![image](https://user-images.githubusercontent.com/31707173/228571949-7fbcd16a-1196-4a6f-be75-0e079efa2bca.png)
+![image](https://user-images.githubusercontent.com/31707173/231190156-58ec973b-45fd-4251-a6cb-fdf0a28f69d9.png)
+![image](https://user-images.githubusercontent.com/31707173/231190206-4d8f5944-1d14-498f-8b5d-c06abaacf99e.png)
+![image](https://user-images.githubusercontent.com/31707173/231190377-f6ec711e-49eb-442b-8372-39bfce0a3d4c.png)
+![image](https://user-images.githubusercontent.com/31707173/231190239-76d3e9b0-f048-4046-a5dc-4ace7b4ed1aa.png)
+![image](https://user-images.githubusercontent.com/31707173/231190438-2360fb8a-3f96-4ee2-8301-d9705b5044c4.png)
+![image](https://user-images.githubusercontent.com/31707173/231190498-85868fc2-7e19-4fb4-b1db-959da3f273fd.png)
+![image](https://user-images.githubusercontent.com/31707173/231191230-e061cb3d-559a-4ad9-8320-e03276e317ff.png)
+![image](https://user-images.githubusercontent.com/31707173/231191265-5c79450d-e2f0-4554-a3f9-02305e4c82f7.png)
+![image](https://user-images.githubusercontent.com/31707173/231191305-685be314-d50b-4633-aa49-6477a4ed0173.png)
+![image](https://user-images.githubusercontent.com/31707173/231191366-028e2054-77b0-4f18-87f0-6f3dd7d0cc81.png)
+![image](https://user-images.githubusercontent.com/31707173/231191397-7bac36ab-eca3-45d7-a3a5-eb77494304ba.png)
+![image](https://user-images.githubusercontent.com/31707173/231191441-fcc33320-ca55-4bf6-857f-7acae9f523fb.png)
+![image](https://user-images.githubusercontent.com/31707173/231191492-bf641aaa-f239-4410-9b30-c82009b3efe4.png)
+![image](https://user-images.githubusercontent.com/31707173/231191796-c093bf5e-bb47-40d8-9e46-b51f99696f76.png)
+
+
+
 
