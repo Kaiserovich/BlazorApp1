@@ -44,6 +44,7 @@ Client part implements CRUD logic for the entities customers and orders, validat
 ![image](https://user-images.githubusercontent.com/31707173/231191397-7bac36ab-eca3-45d7-a3a5-eb77494304ba.png)
 ![image](https://user-images.githubusercontent.com/31707173/231191441-fcc33320-ca55-4bf6-857f-7acae9f523fb.png)
 ![image](https://user-images.githubusercontent.com/31707173/231191492-bf641aaa-f239-4410-9b30-c82009b3efe4.png)
+![image](https://user-images.githubusercontent.com/31707173/231191796-c093bf5e-bb47-40d8-9e46-b51f99696f76.png)
 
 
 
