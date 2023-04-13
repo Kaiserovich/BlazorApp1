@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IClientService dbClient
 
 <PageTitle>Welcome</PageTitle>
 
@@ -13,3 +14,14 @@
         <p>You're not authorized.</p> <a href="/login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+@code{
+
+    List<(Client, Order)> clients;
+
+    protected async override Task OnInitializedAsync()
+    {
+        clients = await dbClient.GetAllClientsWithOrdersCountAsync();
+    }
+
+}

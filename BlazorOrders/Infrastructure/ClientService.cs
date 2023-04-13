@@ -2,6 +2,7 @@
 using BlazorOrders.Entities.Enumerations;
 using BlazorOrders.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace BlazorOrders.Infrastructure
 {
@@ -36,6 +37,14 @@ namespace BlazorOrders.Infrastructure
         {
             repoWrapper.Client.Delete(client);
             repoWrapper.SaveAsync();
+        }
+
+        public async Task<List<(Client, Order)>> GetAllClientsWithOrdersCountAsync()
+        {
+            var clients = await repoWrapper.Client.GetAllClientsAsync();
+            var orders = await repoWrapper.Order.GetAllOrdersAsync();
+            List<(Client, Order)> a = clients.Join(orders, c => c.Id, o => o.ClientId, (c, o) => (c, o)).ToList();
+            return a;
         }
     }
 }
