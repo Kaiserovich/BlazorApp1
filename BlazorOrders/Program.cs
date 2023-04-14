@@ -1,15 +1,16 @@
 using BlazorOrders.Repository;
-using BlazorOrders;
-using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using BlazorOrders.Entities;
 using BlazorOrders.Contracts;
 using BlazorOrders.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
@@ -23,6 +24,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
 var app = builder.Build();
 
