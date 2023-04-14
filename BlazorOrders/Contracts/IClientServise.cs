@@ -6,7 +6,7 @@ namespace BlazorOrders.Contracts
     public interface IClientService
     {
         Task<List<Client>> GetAllClientsAsync();
-        Task<List<(Client, Order)>> GetAllClientsWithOrdersCountAsync();
+        Task<List<(Client, Order)>> GetAllClientsJoinOrdersAsync();
         Task<List<Client>> GetClientsByStatusAsync(ClientStatus status);
         Task<Client> GetClientByIdAsync(int id);
         Task CreateClientAsync(Client client);

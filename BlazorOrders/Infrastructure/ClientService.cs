@@ -2,7 +2,6 @@
 using BlazorOrders.Entities.Enumerations;
 using BlazorOrders.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace BlazorOrders.Infrastructure
 {
@@ -11,6 +10,12 @@ namespace BlazorOrders.Infrastructure
         private readonly IRepositoryWrapper repoWrapper;
         public ClientService(IRepositoryWrapper repoWrapper) => this.repoWrapper = repoWrapper;
         public async Task<List<Client>> GetAllClientsAsync() => await repoWrapper.Client.FindAll().ToListAsync();
+        public async Task<List<(Client, Order)>> GetAllClientsJoinOrdersAsync()
+        {
+            var clients = await repoWrapper.Client.GetAllClientsAsync();
+            var orders = await repoWrapper.Order.GetAllOrdersAsync();
+            return clients.Join(orders, c => c.Id, o => o.ClientId, (c, o) => (c, o)).ToList();
+        }
         public async Task<List<Client>> GetClientsByStatusAsync(ClientStatus status) => await repoWrapper.Client.FindAll().Where(x => x.Status == status).ToListAsync();
         public async Task<Client> GetClientByIdAsync(int id) => await repoWrapper.Client.FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
         public async Task CreateClientAsync(Client client)
@@ -37,14 +42,6 @@ namespace BlazorOrders.Infrastructure
         {
             repoWrapper.Client.Delete(client);
             repoWrapper.SaveAsync();
-        }
-
-        public async Task<List<(Client, Order)>> GetAllClientsWithOrdersCountAsync()
-        {
-            var clients = await repoWrapper.Client.GetAllClientsAsync();
-            var orders = await repoWrapper.Order.GetAllOrdersAsync();
-            List<(Client, Order)> a = clients.Join(orders, c => c.Id, o => o.ClientId, (c, o) => (c, o)).ToList();
-            return a;
         }
     }
 }

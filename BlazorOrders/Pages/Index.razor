@@ -1,27 +1,83 @@
 ﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IClientService dbClient
+@inject IOrderService dbOrder
 
 <PageTitle>Welcome</PageTitle>
 
 <h1>Welcome Page</h1>
 
-<AuthorizeView>
-    <Authorized>
-        <p>Hello, @context.User.Identity.Name!</p>
-    </Authorized>
-    <NotAuthorized>
-        <p>You're not authorized.</p> <a href="/login">Log in</a>
-    </NotAuthorized>
-</AuthorizeView>
+<h2>List of clients</h2>
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Create Data</th>
+                        <th>Status</th>
+                        <th>Cost of all olders</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (clientsJoinOrders == null)
+                    {
+                        <Loading />
+                    }
+                    else if (clientsJoinOrders.Count == 0)
+                    {
+                        <img src="https://i.pinimg.com/originals/ae/8a/c2/ae8ac2fa217d23aadcc913989fcc34a2.png" height="200" />
+                    }
+                    else
+                    {
+                        @foreach (var item in clientsJoinOrders)
+                        {
+                            @*@if (Client != null)
+                    {
+                    <tr>
+                    <td>@Client.Id</td>
+                    <td>@Client.Name</td>
+                    <td>@Client.DataCreate</td>
+                    <td>@Client.Status</td>
+                    <td>
+                    <a class="btn btn-success" href="@url">Open</a>
+                    </td>
+                    </tr>
+                    }*@
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-@code{
+</div>
 
-    List<(Client, Order)> clients;
+
+@code {
+
+    List<(Client, Order)> clientsJoinOrders;
+    List<Order> orders;
+    List<Client> clients;
+    string url;
 
     protected async override Task OnInitializedAsync()
     {
-        clients = await dbClient.GetAllClientsWithOrdersCountAsync();
+        clientsJoinOrders = await dbClient.GetAllClientsJoinOrdersAsync();
+        var clientsJoinOrdersGroupById = clientsJoinOrders.GroupBy(x => x.Item1.Id).Select(x => x);
+        orders = await dbOrder.GetAllOrdersAsync();
+        var ordersGroupByClientId = orders.GroupBy(x => x.ClientId).Select(x => x.Sum());
+        var ordersGroupByClientId2 = orders.GroupBy(x => x.ClientId);
+        clients = await dbClient.GetAllClientsAsync();
+        var a = ordersGroupByClientId.Join(clients, o => o.Key, c => c.Id, (c, o) => (c, o));
+        var b = ordersGroupByClientId.Join(clients, o => o.Key, c => c.Id, (o, c) => (o, c)).ToList();
+        url = $"clients/";
     }
 
 }
+
+
+
