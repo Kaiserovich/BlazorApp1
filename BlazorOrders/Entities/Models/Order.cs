@@ -19,13 +19,10 @@ namespace BlazorOrders.Entities.Models
         [Required]
         [Display(Name= "Currency ID")]
         public CurrencyType Currency { get; set; }
-
         [Required]
         [Display(Name= "Client ID")]
         public int ClientId { get; set; }
         [ForeignKey(nameof(ClientId))]
         public Client Client { get; set; }
-
-
     }
 }
