@@ -41,7 +41,7 @@
                             <RowClient Client="item" DeleteTheClient="DeleteTheClient" />
                         }
                     }
-                    <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirmAsync" OnCancel="OnDeleteCancel" isVisibleConfirmButton="!clientToBeDeletedHasOrders">
+                    <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirm" OnCancel="OnDeleteCancel" isVisibleConfirmButton="!clientToBeDeletedHasOrders">
                         @if (clientToBeDeletedHasOrders)
                         {
                             <div class="text-danger">Client: ID:@clientToBeDeleted.Id cannot be deleted, because deleting a client is available only if there are no orders</div>
@@ -63,16 +63,12 @@
 
 </div>
 
-
-
-
-
 @code {
-    string filter;
+    string? filter;
 
-    List<Client> clients;
+    List<Client>? clients;
     PopUp deletePopUp;
-    Client clientToBeDeleted;
+    Client? clientToBeDeleted;
     bool clientToBeDeletedHasOrders = false;
 
     protected async override Task OnInitializedAsync()
@@ -97,7 +93,6 @@
             {
                 clientToBeDeletedHasOrders = false;
             }
-
             else
             {
                 clientToBeDeletedHasOrders = true;
@@ -106,7 +101,7 @@
             deletePopUp.Show();
         }
     }
-    async void OnDeleteConfirmAsync()
+    void OnDeleteConfirm()
     {
         clients.Remove(clientToBeDeleted);
         deletePopUp.Hide();

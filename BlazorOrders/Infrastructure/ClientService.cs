@@ -10,69 +10,119 @@ namespace BlazorOrders.Infrastructure
 {
     public class ClientService : IClientService
     {
-        private readonly IRepositoryWrapper _repoWrapper;
+        private readonly IRepositoryWrapper _repository;
         private readonly ILoggerManager _logger;
-        public ClientService(IRepositoryWrapper repoWrapper, ILoggerManager logger)
+        public ClientService(IRepositoryWrapper repository, ILoggerManager logger)
         {
-            _repoWrapper = repoWrapper;
+            _repository = repository;
             _logger = logger;
         }
         public async Task<List<Client>> GetAllClientsAsync()
         {
-            _logger.LogDebug($"Geting All Clients");
+            try
+            {
+                _logger.LogDebug($"Geting All Clients");
 
-            return await _repoWrapper.Client.FindAll().ToListAsync();
+                return await _repository.Client.FindAll().ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<List<Client>> GetClientsByStatusAsync(ClientStatus status)
         {
-            _logger.LogDebug($"Geting Clients with status:{status}");
+            try
+            {
+                _logger.LogDebug($"Geting Clients with status:{status}");
 
-            return await _repoWrapper.Client.FindAll().Where(x => x.Status == status).ToListAsync();
+                return await _repository.Client.FindAll()
+                    .Where(x => x.Status == status)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+                return null;
+            }
         }
         public async Task<Client> GetClientByIdAsync(int id)
         {
-            _logger.LogDebug($"Geting Client with ID:{id}");
+            try
+            {
+                _logger.LogDebug($"Geting Client with ID:{id}");
 
-            return await _repoWrapper.Client.FindByCondition(a => a.Id.Equals(id)).FirstOrDefaultAsync();
+                return await _repository.Client.FindByCondition(a => a.Id.Equals(id))
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task CreateClientAsync(Client client)
         {
-            client.DataCreate = DateTime.Now;
-            client.Status = 0;
+            try
+            {
+                client.DataCreate = DateTime.Now;
+                client.Status = 0;
 
-            _logger.LogDebug($"Creating client:{JsonConvert.SerializeObject(client)}");
+                _logger.LogDebug($"Creating client:{JsonConvert.SerializeObject(client)}");
 
-            _repoWrapper.Client.CreateClient(client);
-            await _repoWrapper.SaveAsync();
+                _repository.Client.CreateClient(client);
+                await _repository.SaveAsync();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+            }
         }
         public string UpadateClient(Client client)
         {
-            if (client.Status == ClientStatus.Inactive && _repoWrapper.Order.GetOrdersByClientId(client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
+            try
             {
-                string message = $"The client (ID:{client.Id}) has orders in a new status. So the client's status hasn't changed";
+                if (client.Status == ClientStatus.Inactive && _repository.Order.GetOrdersByClientId(client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
+                {
+                    string message = $"The client (ID:{client.Id}) has orders in a new status. So the client's status hasn't changed";
 
-                _logger.LogDebug(message);
+                    _logger.LogDebug(message);
 
-                return message;
+                    return message;
+                }
+                else
+                {
+                    _logger.LogDebug($"Updating client:{JsonConvert.SerializeObject(client)}");
+
+                    _repository.Client.Update(client);
+                    _repository.SaveAsync();
+
+                    return string.Empty;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogDebug($"Updating client:{JsonConvert.SerializeObject(client)}");
-
-                _repoWrapper.Client.Update(client);
-                _repoWrapper.SaveAsync();
-
-                return string.Empty;
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+                return ex.Message;
             }
         }
         public void DeleteClient(Client client)
         {
-            _logger.LogDebug($"Deleting client:{JsonConvert.SerializeObject(client)}");
+            try
+            {
+                _logger.LogDebug($"Deleting client:{JsonConvert.SerializeObject(client)}");
 
-            _repoWrapper.Client.Delete(client);
-            _repoWrapper.SaveAsync();
+                _repository.Client.Delete(client);
+                _repository.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
+            }
         }
     }
 }
