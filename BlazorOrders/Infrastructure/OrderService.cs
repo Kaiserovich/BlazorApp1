@@ -19,9 +19,13 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting All Order");
+                _logger.LogInfo($"Fetching all the orders from the storage");
 
-                return await _repository.Order.FindAll().ToListAsync();
+                List<Order> orders = await _repository.Order.FindAll().ToListAsync();
+
+                _logger.LogInfo($"Returning {orders.Count} orders");
+
+                return orders;
             }
             catch (Exception ex)
             {
@@ -33,9 +37,13 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting Orders with Client ID:{clientId} ");
+                _logger.LogInfo($"Fetching the orders with Client ID:{clientId} from the storage");
 
-                return _repository.Order.FindByCondition(a => a.ClientId.Equals(clientId)).ToList();
+                List<Order> orders = _repository.Order.FindByCondition(a => a.ClientId.Equals(clientId)).ToList();
+
+                _logger.LogInfo($"Returning {orders.Count} orders");
+
+                return orders;
             }
             catch (Exception ex)
             {
@@ -47,10 +55,14 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting Order with ID:{id}");
+                _logger.LogInfo($"Fetching order with ID:{id} from the storage");
 
-                return await _repository.Order.FindByCondition(a => a.Id.Equals(id))
+                Order order = await _repository.Order.FindByCondition(a => a.Id.Equals(id))
                     .FirstOrDefaultAsync();
+
+                _logger.LogInfo($"Returning order");
+
+                return order;
             }
             catch (Exception ex)
             {
@@ -62,10 +74,14 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting Last Order");
+                _logger.LogInfo($"Fetching last order from the storage");
 
-                return await _repository.Order.FindAll()
+                Order order = await _repository.Order.FindAll()
                     .LastOrDefaultAsync();
+
+                _logger.LogInfo($"Successfully fetching");
+
+                return order;
             }
             catch (Exception ex)
             {
@@ -85,6 +101,8 @@ namespace BlazorOrders.Infrastructure
                 _repository.Order.Create(order);
                 await _repository.SaveAsync();
 
+                _logger.LogInfo($"Successful creation of a new order");
+
             }
             catch (Exception ex)
             {
@@ -99,6 +117,8 @@ namespace BlazorOrders.Infrastructure
 
                 _repository.Order.Update(order);
                 _repository.SaveAsync();
+
+                _logger.LogInfo($"Successful order update");
             }
             catch (Exception ex)
             {
@@ -113,6 +133,8 @@ namespace BlazorOrders.Infrastructure
 
                 _repository.Order.Delete(order);
                 _repository.SaveAsync();
+
+                _logger.LogInfo($"Successful order deletion");
             }
             catch (Exception ex)
             {

@@ -21,11 +21,15 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting All Clients");
+                _logger.LogInfo($"Fetching all the Clients from the storage");
 
-                return await _repository.Client.FindAll().ToListAsync();
+                List<Client> clients = await _repository.Client.FindAll().ToListAsync();
+
+                _logger.LogInfo($"Returning {clients.Count} clients");
+
+                return clients;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside {MethodBase.GetCurrentMethod()} action: {ex.Message}");
                 return null;
@@ -36,11 +40,15 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting Clients with status:{status}");
+                _logger.LogInfo($"Fetching clients with status:{status} from the storage");
 
-                return await _repository.Client.FindAll()
+                List<Client> clients = await _repository.Client.FindAll()
                     .Where(x => x.Status == status)
                     .ToListAsync();
+
+                _logger.LogInfo($"Returning {clients.Count} clients");
+
+                return clients;
             }
             catch (Exception ex)
             {
@@ -52,10 +60,14 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Geting Client with ID:{id}");
+                _logger.LogInfo($"Fetching client with ID:{id} from the storage");
 
-                return await _repository.Client.FindByCondition(a => a.Id.Equals(id))
+                Client client = await _repository.Client.FindByCondition(a => a.Id.Equals(id))
                     .FirstOrDefaultAsync();
+
+                _logger.LogInfo($"Returning clients");
+
+                return client;
             }
             catch (Exception ex)
             {
@@ -68,13 +80,15 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
+                _logger.LogInfo($"Creating client:{JsonConvert.SerializeObject(client)}");
+
                 client.DataCreate = DateTime.Now;
                 client.Status = 0;
 
-                _logger.LogDebug($"Creating client:{JsonConvert.SerializeObject(client)}");
-
                 _repository.Client.CreateClient(client);
                 await _repository.SaveAsync();
+
+                _logger.LogInfo($"Successful creation of a new client");
 
             }
             catch (Exception ex)
@@ -86,20 +100,22 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
+                _logger.LogInfo($"Updating client:{JsonConvert.SerializeObject(client)}");
+
                 if (client.Status == ClientStatus.Inactive && _repository.Order.GetOrdersByClientId(client.Id).Where(order => order.Status == OrderStatus.New).Count() != 0)
                 {
                     string message = $"The client (ID:{client.Id}) has orders in a new status. So the client's status hasn't changed";
 
-                    _logger.LogDebug(message);
+                    _logger.LogInfo(message);
 
                     return message;
                 }
                 else
                 {
-                    _logger.LogDebug($"Updating client:{JsonConvert.SerializeObject(client)}");
-
                     _repository.Client.Update(client);
                     _repository.SaveAsync();
+
+                    _logger.LogInfo($"Successful client update");
 
                     return string.Empty;
                 }
@@ -114,10 +130,12 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Deleting client:{JsonConvert.SerializeObject(client)}");
+                _logger.LogInfo($"Deleting client:{JsonConvert.SerializeObject(client)}");
 
                 _repository.Client.Delete(client);
                 _repository.SaveAsync();
+
+                _logger.LogInfo($"Successful client deletion");
             }
             catch (Exception ex)
             {
