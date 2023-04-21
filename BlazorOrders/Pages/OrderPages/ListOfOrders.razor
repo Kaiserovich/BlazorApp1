@@ -22,6 +22,7 @@
                 <th>Status</th>
                 <th>Currency</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +43,7 @@
                     <RowOrder Order="item" DeleteTheOrder="DeleteTheOrder" />
                 }
             }
-            <PopUp @ref="deletePopUp" NameAction="Delete" OnConfirm="OnDeleteConfirmAsync" OnCancel="OnDeleteCancel">
+            <PopUp @ref="deleteOrderPopUp" NameAction="Delete" OnConfirm="OnDeleteConfirm" OnCancel="OnDeleteCancel">
                 <div class="text-danger">Do you wish to delete order: ID:@orderToBeDeleted.Id ?</div>
             </PopUp>
         </tbody>
@@ -52,7 +53,7 @@
 @code {
     List<Order>? orders;
     Order orderToBeDeleted;
-    PopUp deletePopUp;
+    PopUp deleteOrderPopUp;
     string filter;
 
     protected async override Task OnInitializedAsync()
@@ -75,10 +76,10 @@
         if (order != null)
         {
             orderToBeDeleted = order;
-            deletePopUp.Show();
+            deleteOrderPopUp.Show();
         }
     }
-    async void OnDeleteConfirmAsync()
+    void OnDeleteConfirm()
     {
         orders.Remove(orderToBeDeleted);
         OnDeleteCancel();
@@ -87,6 +88,6 @@
     }
     void OnDeleteCancel()
     {
-        deletePopUp.Hide();
+        deleteOrderPopUp.Hide();
     }
 }

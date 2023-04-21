@@ -1,5 +1,6 @@
 ﻿@page "/orders/{OrderId:int}"
-@inject IRepositoryWrapper db
+@inject IOrderService dbOrder
+@inject IClientService dbClient
 
 @if (order is not null)
 {
@@ -50,8 +51,8 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        order =  await db.Order.GetOrderByIdAsync(OrderId);
+        order =  await dbOrder.GetOrderByIdAsync(OrderId);
         if (order is not null)
-            associatedClient = await db.Client.GetClientByIdAsync(order.ClientId);
+            associatedClient = await dbClient.GetClientByIdAsync(order.ClientId);
     }
 }

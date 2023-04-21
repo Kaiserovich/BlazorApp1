@@ -6,12 +6,15 @@
      aria-labelledby="exampleModal" aria-hidden="true" style="display: block">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title">@Title</h5>
                 </div>
+
                 <div class="modal-body">
                     @ChildContent
                 </div>
+
                 <div class="modal-footer">
                     @if (isVisibleConfirmButton)
                     {
@@ -19,13 +22,13 @@
                     }
                     <button @onclick="OnCancel" type="button" class="btn btn-primary">Cancel</button>
                 </div>
+
             </div>
         </div>
     </div>
 }
 
 @code {
-    bool display = false;
 
     [Parameter] public string Title { get; set; } = "Confirm";
     [Parameter] public string NameAction { get; set; } = "Confirm";
@@ -33,6 +36,8 @@
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public bool isVisibleConfirmButton { get; set; } = true;
+
+    bool display = false;
 
     public void Show() => display = true;
     public void Hide() => display = false;

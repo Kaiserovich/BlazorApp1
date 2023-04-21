@@ -1,5 +1,6 @@
 ﻿@page "/clients/{ClientId:int}"
-@inject IRepositoryWrapper db
+@inject IOrderService dbOrder
+@inject IClientService dbClient
 
 @if (client is not null)
 {
@@ -33,7 +34,7 @@
                     <tbody>
                         <GenericList ListOfItems="ordersByClient">
                             <ItemTemplate Context="order">
-                                <RowOrder Order="order" IsVisibleClientId="false" IsWithButtons=false />
+                                <RowOrder Order="order" IsVisibleClientId="false" DeleteTheOrder="DeleteTheOrder"/>
                             </ItemTemplate>
                         </GenericList>
                     </tbody>
@@ -42,6 +43,10 @@
             </div>
         </div>
     </div>
+
+    <PopUp @ref="deleteOrderPopUp" NameAction="Delete" OnConfirm="OnDeleteConfirm" OnCancel="OnDeleteCancel">
+        <div class="text-danger">Do you wish to delete order: ID:@orderToBeDeleted.Id ?</div>
+    </PopUp>
 }
 else
 {
@@ -53,10 +58,32 @@ else
 
     Client? client;
     List<Order> ordersByClient;
+    Order orderToBeDeleted;
+    PopUp deleteOrderPopUp;
 
     protected async override Task OnInitializedAsync()
     {
-        client = await db.Client.GetClientByIdAsync(ClientId);
-        ordersByClient = db.Order.GetOrdersByClientId(ClientId);
+        client = await dbClient.GetClientByIdAsync(ClientId);
+        ordersByClient = dbOrder.GetOrdersByClientId(ClientId);
+    }
+
+    void DeleteTheOrder(Order order)
+    {
+        if (order != null)
+        {
+            orderToBeDeleted = order;
+            deleteOrderPopUp.Show();
+        }
+    }
+    void OnDeleteConfirm()
+    {
+        deleteOrderPopUp.Hide();
+        
+        ordersByClient.Remove(orderToBeDeleted);
+        dbOrder.DeleteOrder(orderToBeDeleted);
+    }
+    void OnDeleteCancel()
+    {
+        deleteOrderPopUp.Hide();
     }
 }

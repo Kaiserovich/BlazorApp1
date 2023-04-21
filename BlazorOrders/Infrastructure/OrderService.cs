@@ -93,6 +93,7 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
+
                 _logger.LogDebug($"Creating order:{JsonConvert.SerializeObject(order)}");
 
                 order.Status = 0;

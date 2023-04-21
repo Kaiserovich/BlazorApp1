@@ -5,17 +5,17 @@
         <td>@Client.Name</td>
         <td>@Client.DataCreate</td>
         <td>@Client.Status</td>
+        <td><a class="btn btn-success" href="@url">Open</a></td>
+        @if (IsWithButtons)
+        {
+            <td>
 
-        <td>
-            <a class="btn btn-success" href="@url">Open</a>
-            @if (IsWithButtons)
-            {
                 <AuthorizeView>
                     <button class="btn btn-danger" @onclick="(() => DeleteTheClient.InvokeAsync(Client))">Delete</button>
                 </AuthorizeView>
-            }
+            </td>
+        }
 
-        </td>
     </tr>
 }
 @code {
