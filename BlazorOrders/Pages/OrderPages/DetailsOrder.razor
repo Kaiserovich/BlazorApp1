@@ -1,6 +1,7 @@
 ﻿@page "/orders/{OrderId:int}"
 @inject IOrderService dbOrder
 @inject IClientService dbClient
+@inject ILoggerManager logger
 
 @if (order is not null)
 {
@@ -51,8 +52,15 @@ else
 
     protected async override Task OnInitializedAsync()
     {
+        logger.LogDebug($"OnInitializedAsync DetailsOrder page");
+
+
         order =  await dbOrder.GetOrderByIdAsync(OrderId);
         if (order is not null)
             associatedClient = await dbClient.GetClientByIdAsync(order.ClientId);
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        logger.LogDebug($"OnAfterRender DetailsOrder page, firstRender = {firstRender}");
     }
 }
