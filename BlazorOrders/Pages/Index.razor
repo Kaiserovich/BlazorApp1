@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILoggerManager logger
 
 <PageTitle>Welcome</PageTitle>
 
@@ -13,3 +14,18 @@
         <p>You're not authorized.</p> <a href="/login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+@code{
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        logger.LogDebug($"OnInitializedAsync Index page {AuthState.Result.User.Identity.Name}");
+
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        logger.LogDebug($"OnAfterRender Index page, firstRender = {firstRender}, {AuthState.Result.User.Identity.Name}");
+    }
+}

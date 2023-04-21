@@ -1,5 +1,6 @@
 ﻿@page "/orders"
 @inject IOrderService dbOrder
+@inject ILoggerManager logger
 
 <PageTitle>List of orders</PageTitle>
 
@@ -58,7 +59,13 @@
 
     protected async override Task OnInitializedAsync()
     {
+        logger.LogDebug($"OnInitializedAsync ListOfOrders page");
+
         orders = await dbOrder.GetAllOrdersAsync();
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        logger.LogDebug($"OnAfterRender ListOfOrders page, firstRender = {firstRender}");
     }
     public bool IsVisible(Order order)
     {

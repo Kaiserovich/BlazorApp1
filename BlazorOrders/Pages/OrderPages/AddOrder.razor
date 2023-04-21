@@ -3,6 +3,7 @@
 
 @inject IOrderService dbOrder
 @inject IClientService dbClient
+@inject ILoggerManager logger
 
 <div class="card">
     <div class="card-header">
@@ -75,12 +76,18 @@
 
     protected async override Task OnInitializedAsync()
     {
+        logger.LogDebug($"OnInitializedAsync AddOrder page");
+
         clientsByActiveStatus = await dbClient.GetClientsByStatusAsync(ClientStatus.Active);
         if (clientsByActiveStatus.Count() != 0)
         {
             thereAreClientsInAnActiveStatus = true;
             newOrder.ClientId = clientsByActiveStatus.First().Id;
         }
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        logger.LogDebug($"OnAfterRender AddOrder page, firstRender = {firstRender}");
     }
     async Task CreateNewOrderAsync()
     {

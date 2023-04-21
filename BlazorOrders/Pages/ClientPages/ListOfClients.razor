@@ -1,6 +1,7 @@
 ﻿@page "/clients"
 @inject IClientService dbClient
 @inject IOrderService dbOrder
+@inject ILoggerManager logger
 
 <PageTitle>List of clients</PageTitle>
 
@@ -74,7 +75,13 @@
 
     protected async override Task OnInitializedAsync()
     {
+        logger.LogDebug($"OnInitializedAsync ListOfClients page");
+
         clients = await dbClient.GetAllClientsAsync();
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        logger.LogDebug($"OnAfterRender ListOfClients page, firstRender = {firstRender}");
     }
     public bool IsVisible(Client client)
     {

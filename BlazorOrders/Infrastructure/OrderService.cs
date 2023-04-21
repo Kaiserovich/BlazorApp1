@@ -94,7 +94,7 @@ namespace BlazorOrders.Infrastructure
             try
             {
 
-                _logger.LogDebug($"Creating order:{JsonConvert.SerializeObject(order)}");
+                _logger.LogInfo($"Creating order:{JsonConvert.SerializeObject(order)}");
 
                 order.Status = 0;
                 order.Date = DateTime.Now;
@@ -114,7 +114,7 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Updating order:{JsonConvert.SerializeObject(order)}");
+                _logger.LogInfo($"Updating order:{JsonConvert.SerializeObject(order)}");
 
                 _repository.Order.Update(order);
                 _repository.SaveAsync();
@@ -130,7 +130,7 @@ namespace BlazorOrders.Infrastructure
         {
             try
             {
-                _logger.LogDebug($"Deleting order:{JsonConvert.SerializeObject(order)}");
+                _logger.LogInfo($"Deleting order:{JsonConvert.SerializeObject(order)}");
 
                 _repository.Order.Delete(order);
                 _repository.SaveAsync();
